@@ -40,7 +40,7 @@ function ensureDefaultTrip(){
   var t={id:uid(),name:'はじめての旅',date:new Date().toISOString().slice(0,10)};
   db.trips.push(t);save();return t;
 }
-function esc(s){return String(s||'').replace(/&/g,'&').replace(/</g,'<').replace(/>/g,'>').replace(/"/g,'"');}
+function esc(s){return String(s||'').replace(/&/g,'\u0026amp;').replace(/</g,'\u0026lt;').replace(/>/g,'\u0026gt;').replace(/"/g,'\u0026quot;');}
 function findPlace(id){for(var i=0;i<db.places.length;i++)if(db.places[i].id===id)return db.places[i];return null;}
 function tripName(id){for(var i=0;i<db.trips.length;i++)if(db.trips[i].id===id)return db.trips[i].name;return'(なし)';}
 
@@ -247,7 +247,7 @@ var btnR=document.getElementById('btn-rulora'),btnS=document.getElementById('btn
 var grid=document.getElementById('pref-grid');
 PREFS.forEach(function(p){var b=document.createElement('button');b.type='button';b.className='pref-btn';b.textContent=p.name;b.onclick=function(){if(map)map.setView([p.lat,p.lng],p.zoom);closePanels();};grid.appendChild(b);});
 function closePanels(){panelR.classList.add('hidden');panelS.classList.add('hidden');btnR.classList.remove('active');btnS.classList.remove('active');}
-btnR.onclick=function(){var o=panelR.classList.contains('hidden');closePanels();if(o){panelR.classList.remove('hidden');btnR.classList.add('active');}};
+btnR.onclick=function(){var o=panelR.classList.contains('hidden');closePanels();if(o){panelR.classList.remove('hidden');btnR.classList.add('active';}};
 btnS.onclick=function(){var o=panelS.classList.contains('hidden');closePanels();if(o){panelS.classList.remove('hidden');btnS.classList.add('active');}};
 document.querySelectorAll('[data-close]').forEach(function(b){b.onclick=closePanels;});
 var catEl=document.getElementById('filter-categories');
