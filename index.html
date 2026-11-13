@@ -49,25 +49,28 @@
 <div class="filter-actions">
 <button class="dq-button secondary" id="btn-filter-reset" type="button">リセット</button>
 <button class="dq-button" id="btn-filter-apply" type="button">適用</button>
-</div></div>
+</div>
+</div>
 </div>
 </section>
-<section id="tab-quests" class="tab-panel">
-<div class="section-box"><div class="section-title">🎒 旅一覧</div><div id="quest-list"></div>
-<button class="dq-button" id="btn-new-trip" type="button">＋ 新しい旅を作る</button>
+<section id="tab-quest" class="tab-panel">
+<div class="section-box">
+<div class="section-title">🍺 ルイーダの酒場</div>
+<button class="dq-button" id="btn-new-trip" type="button">新しい旅を作る</button>
 </div>
+<div class="section-box"><div class="section-title">冒険の一覧</div><div id="quest-list"></div></div>
 </section>
 <section id="tab-zukan" class="tab-panel">
-<div class="section-box"><div class="section-title">📜 お土産図鑑</div><div id="zukan-list"></div></div>
+<div class="section-box"><div class="section-title">🎁 アイテム図鑑</div><div id="zukan-list"></div></div>
 </section>
 </main>
-<button id="btn-record" class="fab-record" type="button"><span class="fab-icon">＋</span><span class="fab-label">きろく</span></button>
 <nav class="tab-bar">
 <button class="tab-btn active" data-tab="home" type="button"><span class="tab-icon">🏠</span><span class="tab-label">ホーム</span></button>
 <button class="tab-btn" data-tab="map" type="button"><span class="tab-icon">🗺️</span><span class="tab-label">地図</span></button>
-<button class="tab-btn" data-tab="quests" type="button"><span class="tab-icon">🎒</span><span class="tab-label">旅</span></button>
-<button class="tab-btn" data-tab="zukan" type="button"><span class="tab-icon">📜</span><span class="tab-label">図鑑</span></button>
+<button class="tab-btn" data-tab="quest" type="button"><span class="tab-icon">⚔️</span><span class="tab-label">旅</span></button>
+<button class="tab-btn" data-tab="zukan" type="button"><span class="tab-icon">📖</span><span class="tab-label">図鑑</span></button>
 </nav>
+<button class="fab" id="btn-record" type="button">＋</button>
 </div>
 <div id="modal-record" class="modal hidden">
 <div class="modal-content">
@@ -108,6 +111,5 @@
 </div></div>
 <div id="toast" class="toast"></div>
 <script src="app.js"></script>
-<script src="detail.js"></script>
 </body>
 </html>
