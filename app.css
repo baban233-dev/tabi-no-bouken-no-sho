@@ -251,3 +251,27 @@ main{padding-top:10px}
 .kv b{color:#7a4a21}
 .zukan-count{color:#7a4a21}
 .conquest-pref{color:#5a4a2a}
+
+/* ===== ANIME THEME 2: 絵の中に小さな羊皮紙の枠 ===== */
+body{background-color:#79bfe8;background-image:url('assets/anime_bg.jpg'),linear-gradient(180deg,#6db9ec 0%,#a5dcf7 34%,#cdeeb8 78%,#9ccf6e 100%);background-size:cover,cover;background-position:center top,center;background-attachment:fixed,fixed;font-family:"Klee One","Hiragino Maru Gothic ProN","Noto Sans JP",sans-serif}
+main{padding:6px 10px 96px}
+.tab-panel{gap:10px}
+.app-header{padding-top:8px}
+.app-title{font-family:"Hachi Maru Pop","Klee One",sans-serif;font-size:21px;padding:6px 16px}
+.hero-scene{height:196px;border:none;border-radius:0;overflow:visible;background:none;box-shadow:none;margin-bottom:0}
+.hero-bg{display:none}
+.hero-chara{height:178px;left:0}
+.hero-panther{width:128px;right:2px}
+.status-window,.section-box{padding:10px 12px;border-width:2px;border-color:#8a5a2b;border-radius:14px 4px 16px 5px/5px 16px 4px 14px;background-color:rgba(247,234,208,.93);background-image:radial-gradient(ellipse 130px 60px at 12% 0%,rgba(190,150,90,.28),transparent 70%),radial-gradient(ellipse 160px 80px at 95% 100%,rgba(190,150,90,.24),transparent 70%),radial-gradient(ellipse 60px 30px at 70% 20%,rgba(255,255,255,.35),transparent 70%);box-shadow:0 3px 7px rgba(58,42,24,.35),inset 0 0 18px rgba(160,115,55,.18)}
+.place-card,.trip-card,.item-card{background:rgba(253,246,221,.95);border-width:2px;border-radius:12px 4px 14px 5px/5px 14px 4px 12px;padding:8px 10px}
+.section-title{font-family:"Hachi Maru Pop","Klee One",sans-serif;font-size:15px;margin-bottom:6px}
+.status-row{padding:2px 0}
+.status-value{font-weight:600}
+.slime-guide{padding:8px 10px;border-radius:16px}
+.dq-button{font-family:"Hachi Maru Pop","Klee One",sans-serif;padding:9px 10px}
+.fab{font-family:"Hachi Maru Pop","Klee One",sans-serif}
+.tab-label{font-family:"Hachi Maru Pop","Klee One",sans-serif;font-size:11px}
+.modal-content{border-radius:16px 5px 18px 6px/6px 18px 5px 16px;background-color:#f7ead0;background-image:radial-gradient(ellipse 160px 80px at 10% 0%,rgba(190,150,90,.25),transparent 70%),radial-gradient(ellipse 180px 90px at 95% 100%,rgba(190,150,90,.22),transparent 70%)}
+.form-input,.form-select,.form-textarea{font-family:"Klee One",sans-serif}
+.chip{font-family:"Klee One",sans-serif}
+.big-num{font-family:"Hachi Maru Pop","Klee One",sans-serif}
