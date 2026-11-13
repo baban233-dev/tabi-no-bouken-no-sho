@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>旅の冒険の書</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- アプリ全体 -->
+  <div id="app">
+
+    <!-- ヘッダー -->
+    <header class="app-header">
+      <h1 class="app-title">旅の冒険の書</h1>
+    </header>
+
+    <!-- メインコンテンツ -->
+    <main id="main-content">
+
+      <!-- ===== ホームタブ ===== -->
+      <section id="tab-home" class="tab-panel active">
+
+        <!-- ステータス窓 -->
+        <div class="status-window">
+          <div class="status-row">
+            <span class="status-label">Lv</span>
+            <span class="status-value" id="status-lv">1</span>
+          </div>
+          <div class="status-row">
+            <span class="status-label">制覇した町</span>
+            <span class="status-value" id="status-towns">0</span>
+          </div>
+          <div class="status-row">
+            <span class="status-label">アイテム</span>
+            <span class="status-value" id="status-items">0</span>
+          </div>
+          <div class="status-row">
+            <span class="status-label">たからもの</span>
+            <span class="status-value" id="status-treasures">0</span>
+          </div>
+          <!-- 経験値バー -->
+          <div class="exp-bar-wrap">
+            <div class="exp-bar" id="exp-bar" style="width: 15%"></div>
+          </div>
+          <div class="exp-text">次のレベルまで 15 / 100</div>
+        </div>
+
+        <!-- スライム案内 -->
+        <div class="slime-guide">
+          <div class="slime-icon">🐍</div>
+          <div class="slime-message" id="slime-message">
+            ようこそ！ここは「旅の冒険の書」だよ。<br>
+            まだ記録がないようだね。<br>
+            右下の「＋」から、教会できろくしてみよう！
+          </div>
+        </div>
+
+        <!-- 冒険中の旅 -->
+        <div class="section-box">
+          <div class="section-title">🎒 冒険中の旅</div>
+          <div class="quest-card dummy">
+            <div class="quest-name">（まだ旅がありません）</div>
+            <div class="quest-meta">旅を作成するとここに表示されます</div>
+          </div>
+        </div>
+
+        <!-- 最近の記録 -->
+        <div class="section-box">
+          <div class="section-title">📝 最近の記録</div>
+          <div class="recent-list dummy">
+            <div class="empty-message">まだ記録がありません</div>
+          </div>
+        </div>
+
+        <!-- 制覇コーナー -->
+        <div class="section-box conquest-corner">
+          <div class="section-title">🗺️ 制覇コーナー</div>
+          <div class="conquest-summary">
+            <div class="conquest-num">
+              <span class="big-num" id="conquest-count">0</span>
+              <span class="unit">町</span>
+            </div>
+            <div class="conquest-pref">
+              <div class="pref-row"><span>東京都</span><span>0 / 62</span></div>
+              <div class="pref-row"><span>神奈川県</span><span>0 / 33</span></div>
+              <div class="pref-row"><span>静岡県</span><span>0 / 35</span></div>
+            </div>
+          </div>
+          <button class="dq-button secondary" id="btn-conquest-map" disabled>
+            制覇マップを見る（後で実装）
+          </button>
+        </div>
+
+      </section>
+
+      <!-- ===== 地図タブ ===== -->
+      <section id="tab-map" class="tab-panel">
+        <div class="placeholder-panel">
+          <div class="placeholder-icon">🗺️</div>
+          <div class="placeholder-title">地図</div>
+          <div class="placeholder-text">
+            Leaflet + OpenStreetMap で<br>
+            探す用の地図を実装予定<br>
+            <small>（フェーズ2）</small>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== 旅タブ ===== -->
+      <section id="tab-quests" class="tab-panel">
+        <div class="placeholder-panel">
+          <div class="placeholder-icon">🎒</div>
+          <div class="placeholder-title">旅（クエスト）</div>
+          <div class="placeholder-text">
+            クエスト一覧と<br>
+            旅の詳細（タイムライン）を実装予定<br>
+            <small>（フェーズ3）</small>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== 図鑑タブ ===== -->
+      <section id="tab-zukan" class="tab-panel">
+        <div class="placeholder-panel">
+          <div class="placeholder-icon">📜</div>
+          <div class="placeholder-title">図鑑</div>
+          <div class="placeholder-text">
+            お土産コレクションを<br>
+            図鑑形式で表示予定<br>
+            <small>（フェーズ3）</small>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- 右下の記録ボタン（教会） -->
+    <button id="btn-record" class="fab-record" title="教会で きろくする">
+      <span class="fab-icon">＋</span>
+      <span class="fab-label">きろく</span>
+    </button>
+
+    <!-- ボトムタブバー -->
+    <nav class="tab-bar">
+      <button class="tab-btn active" data-tab="home">
+        <span class="tab-icon">🏠</span>
+        <span class="tab-label">ホーム</span>
+      </button>
+      <button class="tab-btn" data-tab="map">
+        <span class="tab-icon">🗺️</span>
+        <span class="tab-label">地図</span>
+      </button>
+      <button class="tab-btn" data-tab="quests">
+        <span class="tab-icon">🎒</span>
+        <span class="tab-label">旅</span>
+      </button>
+      <button class="tab-btn" data-tab="zukan">
+        <span class="tab-icon">📜</span>
+        <span class="tab-label">図鑑</span>
+      </button>
+    </nav>
+
+  </div>
+
+  <!-- 記録フォーム（モーダル・後で実装） -->
+  <div id="modal-record" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span>教会で きろくする</span>
+        <button class="modal-close" id="btn-close-record">×</button>
+      </div>
+      <div class="modal-body">
+        <p class="coming-soon">記録フォームはフェーズ3で実装予定です</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
