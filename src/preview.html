@@ -4,10 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>旅の冒険の書</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" onerror="window.__leafletCssFailed=true">
   <style>
-/* ========================================
-   旅の冒険の書 — ドラクエ風スタイル
-   ======================================== */
 :root {
   --bg-dark: #1a1520;
   --bg-panel: #2a2235;
@@ -42,9 +40,11 @@ html, body {
 }
 #main-content {
   flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: 80px;
+  position: relative;
 }
 .tab-panel { display: none; padding: 12px; animation: fadeIn 0.2s ease; }
 .tab-panel.active { display: block; }
+#tab-map.active { display: flex; flex-direction: column; padding: 0; height: 100%; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
 .status-window {
@@ -56,7 +56,7 @@ html, body {
 .status-label { color: var(--text-sub); }
 .status-value { font-weight: 700; color: var(--text-main); min-width: 2.5em; text-align: right; }
 .exp-bar-wrap { margin-top: 8px; height: 10px; background: #0d0a12; border: 1px solid var(--border-light); border-radius: 2px; overflow: hidden; }
-.exp-bar { height: 100%; background: linear-gradient(90deg, #c9a227, #e8c547); border-radius: 1px; transition: width 0.4s ease; }
+.exp-bar { height: 100%; background: linear-gradient(90deg, #c9a227, #e8c547); border-radius: 1px; }
 .exp-text { font-size: 0.75rem; color: var(--text-sub); text-align: right; margin-top: 3px; }
 
 .slime-guide {
@@ -89,7 +89,6 @@ html, body {
   border-radius: 4px; background: linear-gradient(180deg, #3a3048 0%, #2a2235 100%);
   color: var(--text-main); font-size: 0.9rem; font-weight: 600; cursor: pointer; text-align: center;
 }
-.dq-button:active { transform: scale(0.98); }
 .dq-button:disabled { opacity: 0.45; cursor: not-allowed; border-color: var(--border-light); }
 .dq-button.secondary { border-color: var(--border-light); font-size: 0.85rem; }
 
@@ -101,6 +100,103 @@ html, body {
 .placeholder-title { font-size: 1.2rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px; }
 .placeholder-text { font-size: 0.9rem; line-height: 1.6; }
 .placeholder-text small { color: var(--border-light); }
+
+/* ===== 地図タブ ===== */
+.map-toolbar {
+  flex-shrink: 0;
+  display: flex; gap: 8px; padding: 8px 10px;
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border-light);
+  z-index: 10;
+}
+.map-tool-btn {
+  flex: 1; padding: 8px 6px; border: 1px solid var(--border-light);
+  border-radius: 4px; background: var(--bg-window); color: var(--text-main);
+  font-size: 0.8rem; font-weight: 600; cursor: pointer;
+}
+.map-tool-btn.active {
+  border-color: var(--border-gold); color: var(--border-gold);
+  box-shadow: 0 0 0 1px var(--border-gold);
+}
+#map-container {
+  flex: 1; min-height: 280px; width: 100%;
+  background: #1a1520;
+  position: relative;
+}
+#map {
+  width: 100%; height: 100%;
+  z-index: 1;
+}
+.map-error {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  background: var(--bg-dark); color: var(--text-sub); text-align: center; padding: 20px;
+  z-index: 5;
+}
+.map-error.hidden { display: none; }
+
+/* ルーラ・さくせんパネル */
+.map-panel {
+  position: absolute; left: 10px; right: 10px; top: 52px;
+  background: var(--bg-panel); border: 2px solid var(--border-gold);
+  border-radius: 6px; padding: 12px; z-index: 20;
+  max-height: 55%; overflow-y: auto;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.45);
+}
+.map-panel.hidden { display: none; }
+.map-panel-title {
+  font-size: 0.88rem; font-weight: 700; color: var(--border-gold);
+  margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;
+}
+.map-panel-close {
+  background: none; border: none; color: var(--text-sub); font-size: 1.2rem; cursor: pointer; line-height: 1;
+}
+.pref-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+}
+.pref-btn {
+  padding: 8px 6px; border: 1px solid var(--border-light); border-radius: 4px;
+  background: var(--bg-window); color: var(--text-main); font-size: 0.8rem; cursor: pointer;
+}
+.pref-btn:active { background: #3a3048; }
+
+.filter-group { margin-bottom: 12px; }
+.filter-label { font-size: 0.78rem; color: var(--text-sub); margin-bottom: 6px; }
+.filter-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+  padding: 6px 10px; border: 1px solid var(--border-light); border-radius: 999px;
+  background: var(--bg-window); color: var(--text-main); font-size: 0.78rem; cursor: pointer;
+}
+.chip.active {
+  border-color: var(--border-gold); color: var(--border-gold); background: #2f2838;
+}
+.filter-actions { display: flex; gap: 8px; margin-top: 8px; }
+.filter-actions .dq-button { flex: 1; padding: 8px; font-size: 0.82rem; }
+
+/* ピンポップ */
+.leaflet-popup-content-wrapper {
+  background: var(--bg-panel) !important;
+  color: var(--text-main) !important;
+  border: 2px solid var(--border-gold);
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+}
+.leaflet-popup-tip { background: var(--bg-panel) !important; }
+.leaflet-popup-content { margin: 10px 12px !important; font-size: 0.88rem; }
+.pin-popup-name { font-weight: 700; margin-bottom: 4px; color: var(--border-gold); }
+.pin-popup-meta { color: var(--text-sub); font-size: 0.8rem; line-height: 1.4; }
+.pin-popup-stars { color: #e8c547; margin: 4px 0; }
+
+/* カテゴリピン色 */
+.pin-dot {
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.45);
+}
+.pin-dot.gold {
+  width: 18px; height: 18px;
+  background: #e8c547 !important;
+  border-color: #fff8c8;
+  box-shadow: 0 0 8px rgba(232, 197, 71, 0.8), 0 1px 4px rgba(0,0,0,0.4);
+}
 
 .fab-record {
   position: fixed; right: 16px; bottom: calc(64px + var(--safe-bottom) + 12px);
@@ -146,6 +242,10 @@ html, body {
 .modal-close { background: none; border: none; color: var(--text-sub); font-size: 1.4rem; cursor: pointer; line-height: 1; padding: 0 4px; }
 .modal-body { padding: 24px 16px; text-align: center; }
 .coming-soon { color: var(--text-sub); font-size: 0.95rem; }
+
+/* 地図タブ時はメインのパディングを減らす */
+body.map-open #main-content { padding-bottom: 64px; }
+body.map-open .fab-record { opacity: 0.92; }
   </style>
 </head>
 <body>
@@ -209,10 +309,48 @@ html, body {
 
       <!-- 地図 -->
       <section id="tab-map" class="tab-panel">
-        <div class="placeholder-panel">
-          <div class="placeholder-icon">🗺️</div>
-          <div class="placeholder-title">地図</div>
-          <div class="placeholder-text">Leaflet + OpenStreetMap で<br>探す用の地図を実装予定<br><small>（フェーズ2）</small></div>
+        <div class="map-toolbar">
+          <button class="map-tool-btn" id="btn-rulora" type="button">🌍 ルーラ</button>
+          <button class="map-tool-btn" id="btn-sakusen" type="button">🔍 さくせん</button>
+        </div>
+        <div id="map-container">
+          <div id="map"></div>
+          <div id="map-error" class="map-error hidden">
+            地図の読み込みに失敗しました<br>
+            <small>ネット環境を確認してください</small>
+          </div>
+
+          <!-- ルーラパネル -->
+          <div id="panel-rulora" class="map-panel hidden">
+            <div class="map-panel-title">
+              <span>ルーラ（地域へジャンプ）</span>
+              <button class="map-panel-close" data-close="rulora" type="button">×</button>
+            </div>
+            <div class="pref-grid" id="pref-grid"></div>
+          </div>
+
+          <!-- さくせんパネル -->
+          <div id="panel-sakusen" class="map-panel hidden">
+            <div class="map-panel-title">
+              <span>さくせん（絞り込み）</span>
+              <button class="map-panel-close" data-close="sakusen" type="button">×</button>
+            </div>
+            <div class="filter-group">
+              <div class="filter-label">カテゴリ</div>
+              <div class="filter-chips" id="filter-categories"></div>
+            </div>
+            <div class="filter-group">
+              <div class="filter-label">その他</div>
+              <div class="filter-chips">
+                <button class="chip" data-filter="wantAgain" type="button">また行きたいだけ</button>
+                <button class="chip" data-filter="treasure" type="button">たからものがある</button>
+              </div>
+            </div>
+            <div class="filter-actions">
+              <button class="dq-button secondary" id="btn-filter-reset" type="button">リセット</button>
+              <button class="dq-button" id="btn-filter-apply" type="button">適用</button>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -262,9 +400,60 @@ html, body {
     </div>
   </div>
 
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script>
 (function () {
   'use strict';
+
+  // ========== ダミーデータ ==========
+  var CATEGORIES = [
+    { id: 'michi', label: '道の駅', color: '#5cb85c' },
+    { id: 'omiyage', label: 'お土産店', color: '#d9534f' },
+    { id: 'cafe', label: '食堂/カフェ', color: '#f0ad4e' },
+    { id: 'kanko', label: '観光/景色', color: '#5bc0de' },
+    { id: 'onsen', label: '温泉', color: '#9b59b6' },
+    { id: 'shukuhaku', label: '宿泊', color: '#4a90d9' },
+    { id: 'other', label: 'その他', color: '#95a5a6' }
+  ];
+
+  var PREFS = [
+    { name: '北海道', lat: 43.06, lng: 141.35, zoom: 8 },
+    { name: '東京都', lat: 35.68, lng: 139.76, zoom: 11 },
+    { name: '神奈川県', lat: 35.45, lng: 139.64, zoom: 11 },
+    { name: '静岡県', lat: 34.98, lng: 138.38, zoom: 10 },
+    { name: '長野県', lat: 36.65, lng: 138.18, zoom: 10 },
+    { name: '京都府', lat: 35.01, lng: 135.77, zoom: 12 },
+    { name: '大阪府', lat: 34.69, lng: 135.50, zoom: 12 },
+    { name: '福岡県', lat: 33.59, lng: 130.40, zoom: 11 },
+    { name: '沖縄県', lat: 26.21, lng: 127.68, zoom: 10 }
+  ];
+
+  // 横浜・神奈川辺りのダミー場所
+  var DUMMY_SPOTS = [
+    { id: 1, name: '横浜中華街', cat: 'kanko', lat: 35.447, lng: 139.642, stars: 3, wantAgain: true, hasTreasure: false, note: '夕方の景色が美しい' },
+    { id: 2, name: 'ミネラルヤード', cat: 'other', lat: 35.455, lng: 139.632, stars: 2, wantAgain: false, hasTreasure: false, note: '' },
+    { id: 3, name: '野毛山トップ', cat: 'kanko', lat: 35.3606, lng: 138.7274, stars: 3, wantAgain: true, hasTreasure: true, note: '富士山が美しい' },
+    { id: 4, name: '山下甘酒', cat: 'omiyage', lat: 35.361, lng: 138.710, stars: 3, wantAgain: true, hasTreasure: true, note: 'しろへが絶品' },
+    { id: 5, name: '道の駅 がんがわ', cat: 'michi', lat: 35.475, lng: 139.280, stars: 2, wantAgain: false, hasTreasure: false, note: '' },
+    { id: 6, name: '温泉宿 範例', cat: 'onsen', lat: 35.232, lng: 139.106, stars: 3, wantAgain: true, hasTreasure: false, note: '鮵沢温泉' },
+    { name: 'カフェ ダミー', cat: 'cafe', lat: 35.443, lng: 139.638, stars: 2, wantAgain: false, hasTreasure: false, note: '', id: 7 },
+    { id: 8, name: '横須賀山', cat: 'kanko', lat: 35.487, lng: 139.496, stars: 2, wantAgain: false, hasTreasure: false, note: '' },
+    { id: 9, name: '江の島', cat: 'kanko', lat: 35.629, lng: 139.810, stars: 2, wantAgain: false, hasTreasure: false, note: '' },
+    { id: 10, name: '清水寺', cat: 'kanko', lat: 35.316, lng: 139.536, stars: 3, wantAgain: true, hasTreasure: false, note: '大仏が素晴らしい' }
+  ];
+
+  // ========== 状態 ==========
+  var map = null;
+  var mapReady = false;
+  var markers = [];
+  var markerLayer = null;
+  var filters = {
+    categories: {},  // id -> true/false
+    wantAgain: false,
+    treasure: false
+  };
+
+  // ========== タブ ==========
   var tabButtons = document.querySelectorAll('.tab-btn');
   var tabPanels = document.querySelectorAll('.tab-panel');
 
@@ -275,16 +464,22 @@ html, body {
     tabPanels.forEach(function (panel) {
       panel.classList.toggle('active', panel.id === 'tab-' + tabName);
     });
+    document.body.classList.toggle('map-open', tabName === 'map');
+
+    if (tabName === 'map') {
+      ensureMap();
+    }
+    closeMapPanels();
   }
 
   tabButtons.forEach(function (btn) {
     btn.addEventListener('click', function () { switchTab(btn.dataset.tab); });
   });
 
+  // ========== 記録モーダル ==========
   var btnRecord = document.getElementById('btn-record');
   var modalRecord = document.getElementById('modal-record');
   var btnCloseRecord = document.getElementById('btn-close-record');
-
   if (btnRecord) btnRecord.addEventListener('click', function () { modalRecord.classList.remove('hidden'); });
   if (btnCloseRecord) btnCloseRecord.addEventListener('click', function () { modalRecord.classList.add('hidden'); });
   if (modalRecord) {
@@ -292,6 +487,196 @@ html, body {
       if (e.target === modalRecord) modalRecord.classList.add('hidden');
     });
   }
+
+  // ========== 地図 ==========
+  function catColor(catId) {
+    for (var i = 0; i < CATEGORIES.length; i++) {
+      if (CATEGORIES[i].id === catId) return CATEGORIES[i].color;
+    }
+    return '#95a5a6';
+  }
+
+  function catLabel(catId) {
+    for (var i = 0; i < CATEGORIES.length; i++) {
+      if (CATEGORIES[i].id === catId) return CATEGORIES[i].label;
+    }
+    return catId;
+  }
+
+  function starsHtml(n) {
+    var s = '';
+    for (var i = 0; i < 3; i++) s += i < n ? '★' : '☆';
+    return s;
+  }
+
+  function createIcon(spot) {
+    var color = spot.wantAgain ? null : catColor(spot.cat);
+    var goldClass = spot.wantAgain ? ' gold' : '';
+    var bg = spot.wantAgain ? '#e8c547' : color;
+    return L.divIcon({
+      className: '',
+      html: '<div class="pin-dot' + goldClass + '" style="background:' + bg + '"></div>',
+      iconSize: [18, 18],
+      iconAnchor: [9, 9],
+      popupAnchor: [0, -10]
+    });
+  }
+
+  function popupHtml(spot) {
+    return '<div class="pin-popup-name">' + spot.name + '</div>' +
+      '<div class="pin-popup-meta">' + catLabel(spot.cat) +
+      (spot.wantAgain ? ' · また行きたい' : '') +
+      (spot.hasTreasure ? ' · たからもの' : '') +
+      '</div>' +
+      '<div class="pin-popup-stars">' + starsHtml(spot.stars) + '</div>' +
+      (spot.note ? '<div class="pin-popup-meta">' + spot.note + '</div>' : '');
+  }
+
+  function matchesFilter(spot) {
+    // カテゴリ: 何も選んでいなければ全部OK、選んでいればOR
+    var anyCat = false;
+    var catOk = false;
+    for (var k in filters.categories) {
+      if (filters.categories[k]) {
+        anyCat = true;
+        if (spot.cat === k) catOk = true;
+      }
+    }
+    if (anyCat && !catOk) return false;
+    if (filters.wantAgain && !spot.wantAgain) return false;
+    if (filters.treasure && !spot.hasTreasure) return false;
+    return true;
+  }
+
+  function renderMarkers() {
+    if (!map || !markerLayer) return;
+    markerLayer.clearLayers();
+    markers = [];
+    DUMMY_SPOTS.forEach(function (spot) {
+      if (!matchesFilter(spot)) return;
+      var m = L.marker([spot.lat, spot.lng], { icon: createIcon(spot) });
+      m.bindPopup(popupHtml(spot));
+      m.addTo(markerLayer);
+      markers.push(m);
+    });
+  }
+
+  function ensureMap() {
+    if (mapReady) {
+      setTimeout(function () { if (map) map.invalidateSize(); }, 50);
+      return;
+    }
+    if (typeof L === 'undefined') {
+      document.getElementById('map-error').classList.remove('hidden');
+      return;
+    }
+    try {
+      map = L.map('map', {
+        zoomControl: true,
+        attributionControl: true
+      }).setView([35.45, 139.64], 11);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap'
+      }).addTo(map);
+
+      markerLayer = L.layerGroup().addTo(map);
+      renderMarkers();
+      mapReady = true;
+
+      // タブ表示後にサイズ再計算
+      setTimeout(function () { map.invalidateSize(); }, 100);
+    } catch (e) {
+      console.error(e);
+      document.getElementById('map-error').classList.remove('hidden');
+    }
+  }
+
+  // ========== ルーラ ==========
+  var panelRulora = document.getElementById('panel-rulora');
+  var panelSakusen = document.getElementById('panel-sakusen');
+  var btnRulora = document.getElementById('btn-rulora');
+  var btnSakusen = document.getElementById('btn-sakusen');
+  var prefGrid = document.getElementById('pref-grid');
+
+  PREFS.forEach(function (p) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'pref-btn';
+    b.textContent = p.name;
+    b.addEventListener('click', function () {
+      if (map) map.setView([p.lat, p.lng], p.zoom);
+      closeMapPanels();
+    });
+    prefGrid.appendChild(b);
+  });
+
+  function closeMapPanels() {
+    panelRulora.classList.add('hidden');
+    panelSakusen.classList.add('hidden');
+    btnRulora.classList.remove('active');
+    btnSakusen.classList.remove('active');
+  }
+
+  btnRulora.addEventListener('click', function () {
+    var open = panelRulora.classList.contains('hidden');
+    closeMapPanels();
+    if (open) {
+      panelRulora.classList.remove('hidden');
+      btnRulora.classList.add('active');
+    }
+  });
+
+  btnSakusen.addEventListener('click', function () {
+    var open = panelSakusen.classList.contains('hidden');
+    closeMapPanels();
+    if (open) {
+      panelSakusen.classList.remove('hidden');
+      btnSakusen.classList.add('active');
+    }
+  });
+
+  document.querySelectorAll('[data-close]').forEach(function (btn) {
+    btn.addEventListener('click', closeMapPanels);
+  });
+
+  // ========== さくせん ==========
+  var filterCatEl = document.getElementById('filter-categories');
+  CATEGORIES.forEach(function (c) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'chip';
+    b.dataset.cat = c.id;
+    b.textContent = c.label;
+    b.addEventListener('click', function () {
+      b.classList.toggle('active');
+      filters.categories[c.id] = b.classList.contains('active');
+    });
+    filterCatEl.appendChild(b);
+  });
+
+  document.querySelectorAll('[data-filter]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      btn.classList.toggle('active');
+      var key = btn.dataset.filter;
+      filters[key] = btn.classList.contains('active');
+    });
+  });
+
+  document.getElementById('btn-filter-apply').addEventListener('click', function () {
+    renderMarkers();
+    closeMapPanels();
+  });
+
+  document.getElementById('btn-filter-reset').addEventListener('click', function () {
+    filters = { categories: {}, wantAgain: false, treasure: false };
+    document.querySelectorAll('#panel-sakusen .chip').forEach(function (c) {
+      c.classList.remove('active');
+    });
+    renderMarkers();
+  });
+
 })();
   </script>
 </body>
