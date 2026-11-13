@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>旅の冒険の書</title>
+  <style>
+/* ========================================
+   旅の冒険の書 — ドラクエ風スタイル
+   ======================================== */
+:root {
+  --bg-dark: #1a1520;
+  --bg-panel: #2a2235;
+  --bg-window: #1e1830;
+  --border-gold: #c9a227;
+  --border-light: #5a4a6a;
+  --text-main: #f0e6d0;
+  --text-sub: #b0a090;
+  --accent-blue: #4a90d9;
+  --slime-blue: #6ec6ff;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body {
+  height: 100%; overflow: hidden;
+  font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", Meiryo, sans-serif;
+  background: var(--bg-dark); color: var(--text-main); font-size: 15px; line-height: 1.5;
+}
+#app {
+  display: flex; flex-direction: column; height: 100%; max-width: 480px;
+  margin: 0 auto; position: relative; background: var(--bg-dark);
+}
+.app-header {
+  flex-shrink: 0;
+  background: linear-gradient(180deg, #2d2438 0%, #1e1830 100%);
+  border-bottom: 2px solid var(--border-gold);
+  padding: 10px 16px; text-align: center;
+}
+.app-title {
+  font-size: 1.15rem; font-weight: 700; letter-spacing: 0.08em;
+  color: var(--border-gold); text-shadow: 0 0 8px rgba(201, 162, 39, 0.4);
+}
+#main-content {
+  flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: 80px;
+}
+.tab-panel { display: none; padding: 12px; animation: fadeIn 0.2s ease; }
+.tab-panel.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.status-window {
+  background: var(--bg-window); border: 2px solid var(--border-gold); border-radius: 4px;
+  padding: 10px 14px; margin-bottom: 12px;
+  box-shadow: 0 0 0 1px #000, inset 0 0 12px rgba(0,0,0,0.3);
+}
+.status-row { display: flex; justify-content: space-between; align-items: center; padding: 2px 0; font-size: 0.92rem; }
+.status-label { color: var(--text-sub); }
+.status-value { font-weight: 700; color: var(--text-main); min-width: 2.5em; text-align: right; }
+.exp-bar-wrap { margin-top: 8px; height: 10px; background: #0d0a12; border: 1px solid var(--border-light); border-radius: 2px; overflow: hidden; }
+.exp-bar { height: 100%; background: linear-gradient(90deg, #c9a227, #e8c547); border-radius: 1px; transition: width 0.4s ease; }
+.exp-text { font-size: 0.75rem; color: var(--text-sub); text-align: right; margin-top: 3px; }
+
+.slime-guide {
+  display: flex; gap: 10px; background: var(--bg-panel); border: 2px solid var(--border-light);
+  border-radius: 6px; padding: 12px; margin-bottom: 14px; align-items: flex-start;
+}
+.slime-icon { font-size: 2rem; flex-shrink: 0; line-height: 1; filter: drop-shadow(0 0 4px var(--slime-blue)); }
+.slime-message { font-size: 0.9rem; color: var(--text-main); line-height: 1.55; }
+
+.section-box {
+  background: var(--bg-panel); border: 1px solid var(--border-light); border-radius: 6px;
+  padding: 12px; margin-bottom: 12px;
+}
+.section-title { font-size: 0.88rem; font-weight: 700; color: var(--border-gold); margin-bottom: 8px; letter-spacing: 0.04em; }
+.quest-card { background: var(--bg-window); border-radius: 4px; padding: 10px 12px; }
+.quest-card.dummy { opacity: 0.7; }
+.quest-name { font-weight: 600; margin-bottom: 2px; }
+.quest-meta { font-size: 0.8rem; color: var(--text-sub); }
+.empty-message { text-align: center; color: var(--text-sub); font-size: 0.88rem; padding: 16px 0; }
+
+.conquest-summary { display: flex; gap: 16px; align-items: center; margin-bottom: 10px; }
+.conquest-num { text-align: center; min-width: 70px; }
+.big-num { font-size: 2.2rem; font-weight: 800; color: var(--border-gold); line-height: 1; display: block; }
+.unit { font-size: 0.8rem; color: var(--text-sub); }
+.conquest-pref { flex: 1; font-size: 0.82rem; }
+.pref-row { display: flex; justify-content: space-between; padding: 2px 0; color: var(--text-sub); }
+
+.dq-button {
+  display: block; width: 100%; padding: 10px 14px; border: 2px solid var(--border-gold);
+  border-radius: 4px; background: linear-gradient(180deg, #3a3048 0%, #2a2235 100%);
+  color: var(--text-main); font-size: 0.9rem; font-weight: 600; cursor: pointer; text-align: center;
+}
+.dq-button:active { transform: scale(0.98); }
+.dq-button:disabled { opacity: 0.45; cursor: not-allowed; border-color: var(--border-light); }
+.dq-button.secondary { border-color: var(--border-light); font-size: 0.85rem; }
+
+.placeholder-panel {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  min-height: 50vh; text-align: center; padding: 40px 20px; color: var(--text-sub);
+}
+.placeholder-icon { font-size: 3rem; margin-bottom: 12px; opacity: 0.7; }
+.placeholder-title { font-size: 1.2rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px; }
+.placeholder-text { font-size: 0.9rem; line-height: 1.6; }
+.placeholder-text small { color: var(--border-light); }
+
+.fab-record {
+  position: fixed; right: 16px; bottom: calc(64px + var(--safe-bottom) + 12px);
+  width: 64px; height: 64px; border-radius: 50%; border: 3px solid var(--border-gold);
+  background: linear-gradient(145deg, #3d8fd9, #2a6bb5); color: #fff;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.45), 0 0 0 1px #000; z-index: 50;
+}
+.fab-record:active { transform: scale(0.92); }
+.fab-icon { font-size: 1.5rem; font-weight: 700; line-height: 1; }
+.fab-label { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.05em; margin-top: 1px; }
+
+.tab-bar {
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 100%; max-width: 480px; display: flex;
+  background: linear-gradient(180deg, #2a2235 0%, #1a1520 100%);
+  border-top: 2px solid var(--border-gold); padding-bottom: var(--safe-bottom); z-index: 40;
+}
+.tab-btn {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 2px; padding: 8px 4px 10px; background: transparent; border: none;
+  color: var(--text-sub); cursor: pointer;
+}
+.tab-btn.active { color: var(--border-gold); }
+.tab-btn.active .tab-icon { filter: drop-shadow(0 0 4px rgba(201, 162, 39, 0.5)); }
+.tab-icon { font-size: 1.25rem; line-height: 1; }
+.tab-label { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.02em; }
+
+.modal {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.65);
+  display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px;
+}
+.modal.hidden { display: none; }
+.modal-content {
+  background: var(--bg-panel); border: 2px solid var(--border-gold); border-radius: 6px;
+  width: 100%; max-width: 360px; box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+.modal-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 14px; border-bottom: 1px solid var(--border-light);
+  font-weight: 700; color: var(--border-gold);
+}
+.modal-close { background: none; border: none; color: var(--text-sub); font-size: 1.4rem; cursor: pointer; line-height: 1; padding: 0 4px; }
+.modal-body { padding: 24px 16px; text-align: center; }
+.coming-soon { color: var(--text-sub); font-size: 0.95rem; }
+  </style>
+</head>
+<body>
+  <div id="app">
+
+    <header class="app-header">
+      <h1 class="app-title">旅の冒険の書</h1>
+    </header>
+
+    <main id="main-content">
+
+      <!-- ホーム -->
+      <section id="tab-home" class="tab-panel active">
+        <div class="status-window">
+          <div class="status-row"><span class="status-label">Lv</span><span class="status-value" id="status-lv">1</span></div>
+          <div class="status-row"><span class="status-label">制覇した町</span><span class="status-value" id="status-towns">0</span></div>
+          <div class="status-row"><span class="status-label">アイテム</span><span class="status-value" id="status-items">0</span></div>
+          <div class="status-row"><span class="status-label">たからもの</span><span class="status-value" id="status-treasures">0</span></div>
+          <div class="exp-bar-wrap"><div class="exp-bar" id="exp-bar" style="width:15%"></div></div>
+          <div class="exp-text">次のレベルまで 15 / 100</div>
+        </div>
+
+        <div class="slime-guide">
+          <div class="slime-icon">🐍</div>
+          <div class="slime-message" id="slime-message">
+            ようこそ！ここは「旅の冒険の書」だよ。<br>
+            まだ記録がないようだね。<br>
+            右下の「＋」から、教会できろくしてみよう！
+          </div>
+        </div>
+
+        <div class="section-box">
+          <div class="section-title">🎒 冒険中の旅</div>
+          <div class="quest-card dummy">
+            <div class="quest-name">（まだ旅がありません）</div>
+            <div class="quest-meta">旅を作成するとここに表示されます</div>
+          </div>
+        </div>
+
+        <div class="section-box">
+          <div class="section-title">📝 最近の記録</div>
+          <div class="empty-message">まだ記録がありません</div>
+        </div>
+
+        <div class="section-box">
+          <div class="section-title">🗺️ 制覇コーナー</div>
+          <div class="conquest-summary">
+            <div class="conquest-num">
+              <span class="big-num" id="conquest-count">0</span>
+              <span class="unit">町</span>
+            </div>
+            <div class="conquest-pref">
+              <div class="pref-row"><span>東京都</span><span>0 / 62</span></div>
+              <div class="pref-row"><span>神奈川県</span><span>0 / 33</span></div>
+              <div class="pref-row"><span>静岡県</span><span>0 / 35</span></div>
+            </div>
+          </div>
+          <button class="dq-button secondary" disabled>制覇マップを見る（後で実装）</button>
+        </div>
+      </section>
+
+      <!-- 地図 -->
+      <section id="tab-map" class="tab-panel">
+        <div class="placeholder-panel">
+          <div class="placeholder-icon">🗺️</div>
+          <div class="placeholder-title">地図</div>
+          <div class="placeholder-text">Leaflet + OpenStreetMap で<br>探す用の地図を実装予定<br><small>（フェーズ2）</small></div>
+        </div>
+      </section>
+
+      <!-- 旅 -->
+      <section id="tab-quests" class="tab-panel">
+        <div class="placeholder-panel">
+          <div class="placeholder-icon">🎒</div>
+          <div class="placeholder-title">旅（クエスト）</div>
+          <div class="placeholder-text">クエスト一覧と<br>旅の詳細（タイムライン）を実装予定<br><small>（フェーズ3）</small></div>
+        </div>
+      </section>
+
+      <!-- 図鑑 -->
+      <section id="tab-zukan" class="tab-panel">
+        <div class="placeholder-panel">
+          <div class="placeholder-icon">📜</div>
+          <div class="placeholder-title">図鑑</div>
+          <div class="placeholder-text">お土産コレクションを<br>図鑑形式で表示予定<br><small>（フェーズ3）</small></div>
+        </div>
+      </section>
+
+    </main>
+
+    <button id="btn-record" class="fab-record" title="教会で きろくする">
+      <span class="fab-icon">＋</span>
+      <span class="fab-label">きろく</span>
+    </button>
+
+    <nav class="tab-bar">
+      <button class="tab-btn active" data-tab="home"><span class="tab-icon">🏠</span><span class="tab-label">ホーム</span></button>
+      <button class="tab-btn" data-tab="map"><span class="tab-icon">🗺️</span><span class="tab-label">地図</span></button>
+      <button class="tab-btn" data-tab="quests"><span class="tab-icon">🎒</span><span class="tab-label">旅</span></button>
+      <button class="tab-btn" data-tab="zukan"><span class="tab-icon">📜</span><span class="tab-label">図鑑</span></button>
+    </nav>
+
+  </div>
+
+  <div id="modal-record" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span>教会で きろくする</span>
+        <button class="modal-close" id="btn-close-record">×</button>
+      </div>
+      <div class="modal-body">
+        <p class="coming-soon">記録フォームはフェーズ3で実装予定です</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+(function () {
+  'use strict';
+  var tabButtons = document.querySelectorAll('.tab-btn');
+  var tabPanels = document.querySelectorAll('.tab-panel');
+
+  function switchTab(tabName) {
+    tabButtons.forEach(function (btn) {
+      btn.classList.toggle('active', btn.dataset.tab === tabName);
+    });
+    tabPanels.forEach(function (panel) {
+      panel.classList.toggle('active', panel.id === 'tab-' + tabName);
+    });
+  }
+
+  tabButtons.forEach(function (btn) {
+    btn.addEventListener('click', function () { switchTab(btn.dataset.tab); });
+  });
+
+  var btnRecord = document.getElementById('btn-record');
+  var modalRecord = document.getElementById('modal-record');
+  var btnCloseRecord = document.getElementById('btn-close-record');
+
+  if (btnRecord) btnRecord.addEventListener('click', function () { modalRecord.classList.remove('hidden'); });
+  if (btnCloseRecord) btnCloseRecord.addEventListener('click', function () { modalRecord.classList.add('hidden'); });
+  if (modalRecord) {
+    modalRecord.addEventListener('click', function (e) {
+      if (e.target === modalRecord) modalRecord.classList.add('hidden');
+    });
+  }
+})();
+  </script>
+</body>
+</html>
