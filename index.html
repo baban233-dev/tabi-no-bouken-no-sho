@@ -62,7 +62,14 @@
 <div class="section-box"><div class="section-title" id="quest-section-title">冒険の一覧</div><div id="quest-list"></div></div>
 </section>
 <section id="tab-zukan" class="tab-panel">
-<div class="section-box"><div class="section-title">🎁 アイテム図鑑</div><div id="zukan-list"></div></div>
+<div class="section-box"><div class="section-title">🎁 アイテム図鑑</div>
+<div class="zukan-count" id="zukan-count"></div>
+<div class="filter-chips zukan-filters" id="zukan-filters">
+<button class="chip active" data-zfilter="all" type="button">すべて</button>
+<button class="chip" data-zfilter="treasure" type="button">たからものだけ</button>
+<button class="chip" data-zfilter="metal" type="button">メタル級だけ</button>
+</div>
+<div id="zukan-list"></div></div>
 </section>
 </main>
 <nav class="tab-bar">
@@ -104,6 +111,28 @@
 <div class="form-group"><label class="form-label">旅の名前 *</label><input class="form-input" id="t-name" type="text"></div>
 <div class="form-group"><label class="form-label">開始日</label><input class="form-input" id="t-date" type="date"></div>
 <button class="dq-button" id="btn-save-trip" type="button">旅を作る</button>
+</div></div></div>
+<div id="modal-item" class="modal hidden">
+<div class="modal-content">
+<div class="modal-header"><span>🎁 お土産を編集</span><button class="modal-close" id="btn-close-item" type="button">×</button></div>
+<div class="modal-body">
+<div class="form-group"><label class="form-label">買った場所</label><div class="form-static" id="i-place">（なし）</div></div>
+<div class="form-group"><label class="form-label">品名 *</label><input class="form-input" id="i-name" type="text"></div>
+<div class="form-group"><label class="form-label">カテゴリ</label><select class="form-select" id="i-cat"></select></div>
+<div class="form-row">
+<div class="form-group"><label class="form-label">金額（円・参考）</label><input class="form-input" id="i-price" type="number" inputmode="numeric" min="0" placeholder="例：1200"></div>
+<div class="form-group"><label class="form-label">誰用か</label><select class="form-select" id="i-for"></select></div>
+</div>
+<div class="form-group"><label class="form-label">評価</label>
+<div class="star-pick" id="i-stars">
+<button type="button" class="star-btn" data-s="0">なし</button>
+<button type="button" class="star-btn" data-s="1">★</button>
+<button type="button" class="star-btn" data-s="2">★★</button>
+<button type="button" class="star-btn" data-s="3">★★★</button>
+</div></div>
+<label class="check-row"><input type="checkbox" id="i-treasure"> たからもの（また買う）</label>
+<div class="form-group"><label class="form-label">メモ（誰が喜んだか など）</label><textarea class="form-textarea" id="i-note"></textarea></div>
+<button class="dq-button" id="btn-save-item" type="button" style="margin-top:8px">変更を保存する</button>
 </div></div></div>
 <div id="modal-detail" class="modal hidden">
 <div class="modal-content">

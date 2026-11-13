@@ -10,6 +10,16 @@ var CATEGORIES=[
 {id:'shukuhaku',label:'宿泊',color:'#4a90d9'},
 {id:'other',label:'その他',color:'#95a5a6'}
 ];
+var ITEM_CATEGORIES=[
+{id:'',label:'（未分類）'},
+{id:'okashi',label:'お菓子'},
+{id:'shokuhin',label:'食品'},
+{id:'nomimono',label:'飲み物'},
+{id:'chomiryo',label:'調味料'},
+{id:'kogei',label:'工芸品/雑貨'},
+{id:'other',label:'その他'}
+];
+var ITEM_FOR_WHOM=['','家用','妻の実家用','職場','自分用','その他'];
 var PREFS=[
 {name:'北海道',lat:43.06,lng:141.35,zoom:8},{name:'東京都',lat:35.68,lng:139.76,zoom:11},
 {name:'神奈川県',lat:35.45,lng:139.64,zoom:11},{name:'静岡県',lat:34.98,lng:138.38,zoom:10},
@@ -42,6 +52,13 @@ function ensureDefaultTrip(){
 }
 function esc(s){return String(s||'').replace(/&/g,'\u0026amp;').replace(/</g,'\u0026lt;').replace(/>/g,'\u0026gt;').replace(/"/g,'\u0026quot;');}
 function findPlace(id){for(var i=0;i<db.places.length;i++)if(db.places[i].id===id)return db.places[i];return null;}
+function findItem(id){for(var i=0;i<db.items.length;i++)if(db.items[i].id===id)return db.items[i];return null;}
+function itemCatLabel(id){for(var i=0;i<ITEM_CATEGORIES.length;i++)if(ITEM_CATEGORIES[i].id===id)return ITEM_CATEGORIES[i].label;return'（未分類）';}
+function isMetalItem(it){return !!it&&it.treasure&&(it.stars||0)>=3;}
+function isMetalPlace(p){return !!p&&p.wantAgain&&(p.stars||0)>=3;}
+function metalBadgeHtml(){return '<span class="metal-badge">🩶 メタルスライム級</span>';}
+function priceHtml(v){var n=parseInt(v,10);if(isNaN(n)||n<=0)return'';return '¥'+String(n).replace(/\B(?=(\d{3})+(?!\d))/g,',');}
+function newItem(name,place,treasure){return{id:uid(),name:name,placeId:place.id,placeName:place.name,treasure:!!treasure,cat:'',price:'',forWhom:'',stars:0,note:'',createdAt:Date.now()};}
 function tripName(id){for(var i=0;i<db.trips.length;i++)if(db.trips[i].id===id)return db.trips[i].name;return'(なし)';}
 
 function refreshHome(){
@@ -151,12 +168,112 @@ function openTripDetail(tripId){
   var rb=document.getElementById('btn-show-route');
   if(rb)rb.onclick=function(){showTripRoute(tripId);};
 }
+var zukanFilter='all';
+function itemMetaLine(it){
+  var parts=[];
+  if(it.cat)parts.push(itemCatLabel(it.cat));
+  var pr=priceHtml(it.price);if(pr)parts.push(pr);
+  if(it.forWhom)parts.push(esc(it.forWhom));
+  if(it.stars)parts.push(starsHtml(it.stars));
+  return parts.join(' · ');
+}
 function refreshZukan(){
   var el=document.getElementById('zukan-list');
-  if(!db.items.length)el.innerHTML='<div class="empty-message">まだお土産がありません</div>';
-  else el.innerHTML=db.items.slice().reverse().map(function(it){
-    return '<div class="list-item"><div class="t">'+(it.treasure?'💎 ':'')+esc(it.name)+'</div><div class="m">'+esc(it.placeName||'')+(it.treasure?' · たからもの':'')+'</div></div>';
+  var cnt=document.getElementById('zukan-count');
+  var treasures=db.items.filter(function(it){return it.treasure;}).length;
+  var metals=db.items.filter(function(it){return isMetalItem(it);}).length;
+  if(cnt)cnt.textContent=db.items.length?('全 '+db.items.length+' 個 · たからもの '+treasures+' 個'+(metals?' · メタル級 '+metals+' 個':'')):'';
+  document.querySelectorAll('#zukan-filters .chip').forEach(function(c){c.classList.toggle('active',c.dataset.zfilter===zukanFilter);});
+  if(!db.items.length){el.innerHTML='<div class="empty-message">まだお土産がありません</div>';return;}
+  var list=db.items.slice().reverse().filter(function(it){
+    if(zukanFilter==='treasure')return !!it.treasure;
+    if(zukanFilter==='metal')return isMetalItem(it);
+    return true;
+  });
+  if(!list.length){el.innerHTML='<div class="empty-message">この条件のお土産はまだありません</div>';return;}
+  el.innerHTML=list.map(function(it){
+    var meta=itemMetaLine(it);
+    return '<div class="list-item tap" data-item-id="'+it.id+'"><div class="t">'+(it.treasure?'💎 ':'')+esc(it.name)+(isMetalItem(it)?' '+metalBadgeHtml():'')+'</div><div class="m">'+esc(it.placeName||'')+(it.treasure?' · たからもの':'')+(meta?' · '+meta:'')+'</div></div>';
   }).join('');
+  bindItemTaps();
+}
+function bindItemTaps(){
+  document.querySelectorAll('[data-item-id]').forEach(function(el){
+    el.onclick=function(e){if(e&&e.stopPropagation)e.stopPropagation();openItemDetail(el.getAttribute('data-item-id'));};
+  });
+}
+function bindZukanFilters(){
+  document.querySelectorAll('#zukan-filters .chip').forEach(function(c){
+    c.onclick=function(){zukanFilter=c.dataset.zfilter;refreshZukan();};
+  });
+}
+function openItemDetail(id){
+  var it=findItem(id);if(!it){toast('お土産が見つかりません');return;}
+  document.getElementById('detail-title').textContent=it.name;
+  var meta=itemMetaLine(it);
+  document.getElementById('detail-body').innerHTML=
+    (isMetalItem(it)?'<div class="detail-block">'+metalBadgeHtml()+'<div class="mini-map-hint">★3つ＋たからもの＝伝説級の印だよ</div></div>':'')+
+    '<div class="detail-block"><div class="detail-label">買った場所</div><div class="detail-value">'+esc(it.placeName||'（なし）')+'</div></div>'+
+    (it.cat?'<div class="detail-block"><div class="detail-label">カテゴリ</div><div class="detail-value">'+esc(itemCatLabel(it.cat))+'</div></div>':'')+
+    '<div class="detail-block"><div class="detail-label">評価</div><div class="detail-value">'+(it.stars?'<span class="detail-stars">'+starsHtml(it.stars)+'</span>':'未評価')+'</div></div>'+
+    (it.treasure?'<div class="detail-block"><div class="detail-value">💎 たからもの（また買う）</div></div>':'')+
+    (priceHtml(it.price)?'<div class="detail-block"><div class="detail-label">金額（参考）</div><div class="detail-value">'+priceHtml(it.price)+'</div></div>':'')+
+    (it.forWhom?'<div class="detail-block"><div class="detail-label">誰用か</div><div class="detail-value">'+esc(it.forWhom)+'</div></div>':'')+
+    (it.note?'<div class="detail-block"><div class="detail-label">メモ</div><div class="detail-value">'+esc(it.note)+'</div></div>':'')+
+    (!it.cat&&!it.stars&&!it.price&&!it.forWhom&&!it.note?'<div class="detail-block"><div class="detail-value" style="font-size:.85rem;color:var(--sub)">カテゴリや評価は「編集」から足せます'+(meta?'':'')+'</div></div>':'')+
+    '<div class="detail-actions"><button class="dq-button secondary" type="button" id="btn-item-edit">編集</button><button class="dq-button danger" type="button" id="btn-item-delete">削除</button></div>';
+  modalD.classList.remove('hidden');
+  document.getElementById('btn-item-edit').onclick=function(){openEditItem(it.id);};
+  document.getElementById('btn-item-delete').onclick=function(){deleteItem(it.id);};
+}
+function deleteItem(id){
+  if(!confirm('このお土産を図鑑から削除しますか？'))return;
+  db.items=db.items.filter(function(it){return it.id!==id;});
+  save();refreshAll();modalD.classList.add('hidden');toast('削除しました');
+}
+var modalI=null,editingItemId=null,itemStarValue=0;
+function openEditItem(id){
+  var it=findItem(id);if(!it)return;
+  if(!modalI)modalI=document.getElementById('modal-item');
+  editingItemId=id;itemStarValue=it.stars||0;
+  document.getElementById('i-place').textContent=it.placeName||'（なし）';
+  document.getElementById('i-name').value=it.name||'';
+  var cat=document.getElementById('i-cat');
+  cat.innerHTML=ITEM_CATEGORIES.map(function(c){return '<option value="'+c.id+'">'+c.label+'</option>';}).join('');
+  cat.value=it.cat||'';
+  document.getElementById('i-price').value=it.price||'';
+  var fw=document.getElementById('i-for');
+  fw.innerHTML=ITEM_FOR_WHOM.map(function(v){return '<option value="'+esc(v)+'">'+(v||'（未設定）')+'</option>';}).join('');
+  fw.value=it.forWhom||'';
+  document.getElementById('i-treasure').checked=!!it.treasure;
+  document.getElementById('i-note').value=it.note||'';
+  document.querySelectorAll('#i-stars .star-btn').forEach(function(x){x.classList.toggle('on',+x.dataset.s===itemStarValue);});
+  modalD.classList.add('hidden');
+  modalI.classList.remove('hidden');
+}
+function initItemModal(){
+  modalI=document.getElementById('modal-item');
+  if(!modalI)return;
+  document.getElementById('btn-close-item').onclick=function(){modalI.classList.add('hidden');};
+  modalI.onclick=function(e){if(e.target===modalI)modalI.classList.add('hidden');};
+  document.querySelectorAll('#i-stars .star-btn').forEach(function(b){
+    b.onclick=function(){itemStarValue=+b.dataset.s;document.querySelectorAll('#i-stars .star-btn').forEach(function(x){x.classList.toggle('on',+x.dataset.s===itemStarValue);});};
+  });
+  document.getElementById('btn-save-item').onclick=function(){
+    var it=findItem(editingItemId);if(!it){modalI.classList.add('hidden');return;}
+    var name=document.getElementById('i-name').value.trim();
+    if(!name){toast('品名を入れてね');return;}
+    it.name=name;
+    it.cat=document.getElementById('i-cat').value;
+    var pv=document.getElementById('i-price').value;
+    it.price=pv===''? '':Math.max(0,parseInt(pv,10)||0);
+    it.forWhom=document.getElementById('i-for').value;
+    it.stars=itemStarValue;
+    it.treasure=document.getElementById('i-treasure').checked;
+    it.note=document.getElementById('i-note').value.trim();
+    save();refreshAll();modalI.classList.add('hidden');editingItemId=null;
+    toast(isMetalItem(it)?'メタルスライム級に記録しました！':'変更を保存しました');
+  };
 }
 function refreshAll(){
   refreshHome();
@@ -224,8 +341,9 @@ function openPlaceDetail(id){
   editingPlaceId=null;
   document.getElementById('detail-title').textContent=p.name;
   var items=db.items.filter(function(it){return it.placeId===p.id;});
-  var ih=items.length?items.map(function(it){return'<div class="list-item" style="margin-top:6px"><div class="t">'+(it.treasure?'💎 ':'')+esc(it.name)+'</div></div>';}).join(''):'';
+  var ih=items.length?items.map(function(it){var m=itemMetaLine(it);return'<div class="list-item tap" data-item-id="'+it.id+'" style="margin-top:6px"><div class="t">'+(it.treasure?'💎 ':'')+esc(it.name)+(isMetalItem(it)?' '+metalBadgeHtml():'')+'</div>'+(m?'<div class="m">'+m+'</div>':'')+'</div>';}).join(''):'';
   document.getElementById('detail-body').innerHTML=
+    (isMetalPlace(p)?'<div class="detail-block">'+metalBadgeHtml()+'<div class="mini-map-hint">★3つ＋また行きたい＝伝説級の印だよ</div></div>':'')+
     '<div class="detail-block"><div class="detail-label">カテゴリ</div><div class="detail-value">'+esc(catLabel(p.cat))+'</div></div>'+
     '<div class="detail-block"><div class="detail-label">評価</div><div class="detail-stars">'+starsHtml(p.stars)+'</div></div>'+
     (p.wantAgain?'<div class="detail-block"><div class="detail-value">✨ また行きたい</div></div>':'')+
@@ -235,6 +353,7 @@ function openPlaceDetail(id){
     (ih?'<div class="detail-block"><div class="detail-label">お土産</div>'+ih+'</div>':'')+
     '<div class="detail-actions"><button class="dq-button secondary" type="button" id="btn-detail-edit">編集</button><button class="dq-button danger" type="button" id="btn-detail-delete">削除</button></div>';
   modalD.classList.remove('hidden');
+  bindItemTaps();
   document.getElementById('btn-detail-edit').onclick=function(){openEditPlace(p.id);};
   document.getElementById('btn-detail-delete').onclick=function(){deletePlace(p.id);};
 }
@@ -282,7 +401,7 @@ document.getElementById('btn-save-record').onclick=function(){
     var p=findPlace(editingPlaceId);
     if(p){p.tripId=tripId;p.name=name;p.cat=document.getElementById('f-cat').value;p.lat=lat;p.lng=lng;p.stars=starValue;p.wantAgain=document.getElementById('f-want').checked;p.note=document.getElementById('f-note').value.trim();}
     var iname=document.getElementById('f-item').value.trim();
-    if(iname){db.items.push({id:uid(),name:iname,placeId:editingPlaceId,placeName:name,treasure:document.getElementById('f-treasure').checked,createdAt:Date.now()});db.exp+=document.getElementById('f-treasure').checked?20:8;}
+    if(iname){db.items.push(newItem(iname,{id:editingPlaceId,name:name},document.getElementById('f-treasure').checked));db.exp+=document.getElementById('f-treasure').checked?20:8;}
     save();refreshAll();modalR.classList.add('hidden');editingPlaceId=null;
     document.querySelector('#modal-record .modal-header span').textContent='⛪ 教会で きろくする';
     document.getElementById('btn-save-record').textContent='冒険の書に記録する';
@@ -291,7 +410,7 @@ document.getElementById('btn-save-record').onclick=function(){
   var place={id:uid(),tripId:tripId,name:name,cat:document.getElementById('f-cat').value,lat:lat,lng:lng,stars:starValue,wantAgain:document.getElementById('f-want').checked,note:document.getElementById('f-note').value.trim(),createdAt:Date.now()};
   db.places.push(place);db.exp+=15+(place.wantAgain?5:0);
   var iname2=document.getElementById('f-item').value.trim();
-  if(iname2){db.items.push({id:uid(),name:iname2,placeId:place.id,placeName:place.name,treasure:document.getElementById('f-treasure').checked,createdAt:Date.now()});db.exp+=document.getElementById('f-treasure').checked?20:8;}
+  if(iname2){db.items.push(newItem(iname2,place,document.getElementById('f-treasure').checked));db.exp+=document.getElementById('f-treasure').checked?20:8;}
   save();refreshAll();modalR.classList.add('hidden');toast('冒険の書に記録しました！');
 };
 
@@ -305,7 +424,7 @@ function ensureLeaflet(){if(typeof L!=='undefined')return Promise.resolve('cache
 function setMapStatus(msg,hide){var el=document.getElementById('map-status');if(hide){el.classList.add('hidden');return;}el.textContent=msg;el.classList.remove('hidden');}
 function icon(spot){var bg=spot.wantAgain?'#e8c547':catColor(spot.cat);var g=spot.wantAgain?' gold':'';return L.divIcon({className:'',html:'<div class="pin-dot'+g+'" style="background:'+bg+'"></div>',iconSize:[18,18],iconAnchor:[9,9],popupAnchor:[0,-10]});}
 function numIcon(n){return L.divIcon({className:'',html:'<div class="route-num">'+n+'</div>',iconSize:[26,26],iconAnchor:[13,13],popupAnchor:[0,-14]});}
-function popup(spot){return'<div class="pin-popup-name">'+esc(spot.name)+'</div><div class="pin-popup-meta">'+catLabel(spot.cat)+(spot.wantAgain?' · また行きたい':'')+'</div><div class="pin-popup-stars">'+starsHtml(spot.stars)+'</div>'+(spot.note?'<div class="pin-popup-meta">'+esc(spot.note)+'</div>':'');}
+function popup(spot){return'<div class="pin-popup-name">'+esc(spot.name)+'</div><div class="pin-popup-meta">'+catLabel(spot.cat)+(spot.wantAgain?' · また行きたい':'')+'</div><div class="pin-popup-stars">'+starsHtml(spot.stars)+'</div>'+(spot.note?'<div class="pin-popup-meta">'+esc(spot.note)+'</div>':'')+(isMetalPlace(spot)?'<div style="margin-top:4px">'+metalBadgeHtml()+'</div>':'')+'<button type="button" class="pin-detail-btn" data-place-detail="'+spot.id+'">詳細を見る</button>';}
 function match(spot){var any=false,ok=false;for(var k in filters.categories){if(filters.categories[k]){any=true;if(spot.cat===k)ok=true;}}if(any&&!ok)return false;if(filters.wantAgain&&!spot.wantAgain)return false;if(filters.treasure){var has=db.items.some(function(it){return it.placeId===spot.id&&it.treasure;});if(!has)return false;}return true;}
 function updateRouteBanner(){
   var el=document.getElementById('route-banner');
@@ -379,7 +498,7 @@ function renderMarkers(){
   });
 }
 function ensureMap(){if(mapReady){try{map.invalidateSize(true);}catch(e){}renderMarkers();return;}setMapStatus('地図ライブラリを読み込み中…');ensureLeaflet().then(function(){initMap();}).catch(function(){setMapStatus('地図ライブラリの読み込みに失敗しました');});}
-function initMap(){if(mapReady){map.invalidateSize(true);return;}try{map=L.map('map',{zoomControl:true}).setView([DEFAULT_LAT,DEFAULT_LNG],11);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OSM'}).addTo(map);markerLayer=L.layerGroup().addTo(map);renderMarkers();mapReady=true;setTimeout(function(){map.invalidateSize(true);setMapStatus('',true);},120);setTimeout(function(){map.invalidateSize(true);},500);}catch(err){setMapStatus('初期化失敗: '+err.message);}}
+function initMap(){if(mapReady){map.invalidateSize(true);return;}try{map=L.map('map',{zoomControl:true}).setView([DEFAULT_LAT,DEFAULT_LNG],11);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OSM'}).addTo(map);markerLayer=L.layerGroup().addTo(map);map.on('popupopen',function(e){try{var node=e.popup&&e.popup._contentNode;if(!node)return;var b=node.querySelector('[data-place-detail]');if(b)b.onclick=function(){var pid=b.getAttribute('data-place-detail');try{map.closePopup();}catch(x){}openPlaceDetail(pid);};}catch(x){}});renderMarkers();mapReady=true;setTimeout(function(){map.invalidateSize(true);setMapStatus('',true);},120);setTimeout(function(){map.invalidateSize(true);},500);}catch(err){setMapStatus('初期化失敗: '+err.message);}}
 var panelR=document.getElementById('panel-rulora'),panelS=document.getElementById('panel-sakusen');
 var btnR=document.getElementById('btn-rulora'),btnS=document.getElementById('btn-sakusen');
 var grid=document.getElementById('pref-grid');
@@ -394,5 +513,5 @@ document.querySelectorAll('[data-filter]').forEach(function(b){b.onclick=functio
 document.getElementById('btn-filter-apply').onclick=function(){renderMarkers();closePanels();};
 document.getElementById('btn-filter-reset').onclick=function(){filters={categories:{},wantAgain:false,treasure:false};document.querySelectorAll('#panel-sakusen .chip').forEach(function(c){c.classList.remove('active');});renderMarkers();};
 
-load();refreshAll();
+load();initItemModal();bindZukanFilters();refreshAll();
 })();
