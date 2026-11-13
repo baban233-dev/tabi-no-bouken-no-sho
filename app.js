@@ -247,7 +247,7 @@ var btnR=document.getElementById('btn-rulora'),btnS=document.getElementById('btn
 var grid=document.getElementById('pref-grid');
 PREFS.forEach(function(p){var b=document.createElement('button');b.type='button';b.className='pref-btn';b.textContent=p.name;b.onclick=function(){if(map)map.setView([p.lat,p.lng],p.zoom);closePanels();};grid.appendChild(b);});
 function closePanels(){panelR.classList.add('hidden');panelS.classList.add('hidden');btnR.classList.remove('active');btnS.classList.remove('active');}
-btnR.onclick=function(){var o=panelR.classList.contains('hidden');closePanels();if(o){panelR.classList.remove('hidden');btnR.classList.add('active';}};
+btnR.onclick=function(){var o=panelR.classList.contains('hidden');closePanels();if(o){panelR.classList.remove('hidden');btnR.classList.add('active');}};
 btnS.onclick=function(){var o=panelS.classList.contains('hidden');closePanels();if(o){panelS.classList.remove('hidden');btnS.classList.add('active');}};
 document.querySelectorAll('[data-close]').forEach(function(b){b.onclick=closePanels;});
 var catEl=document.getElementById('filter-categories');
@@ -255,13 +255,6 @@ CATEGORIES.forEach(function(c){var b=document.createElement('button');b.type='bu
 document.querySelectorAll('[data-filter]').forEach(function(b){b.onclick=function(){b.classList.toggle('active');filters[b.dataset.filter]=b.classList.contains('active');};});
 document.getElementById('btn-filter-apply').onclick=function(){renderMarkers();closePanels();};
 document.getElementById('btn-filter-reset').onclick=function(){filters={categories:{},wantAgain:false,treasure:false};document.querySelectorAll('#panel-sakusen .chip').forEach(function(c){c.classList.remove('active');});renderMarkers();};
-
-var _orf=openRecordForm;openRecordForm=function(){
-  editingPlaceId=null;
-  document.querySelector('#modal-record .modal-header span').textContent='⛪ 教会で きろくする';
-  document.getElementById('btn-save-record').textContent='冒険の書に記録する';
-  _orf();
-};
 
 load();refreshAll();
 })();
