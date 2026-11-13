@@ -1,1 +1,53 @@
-PLACEHOLDER
+<!DOCTYPE html>
+<html lang="ja"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>旅の冒険の書</title>
+<style>
+body{margin:0;font-family:sans-serif;background:#1a1520;color:#f0e6d0}
+#app{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+header{padding:12px;text-align:center;border-bottom:2px solid #c9a227;color:#c9a227;font-weight:700}
+#mapwrap{flex:1;min-height:60vh;position:relative;background:#2a2235}
+#map{position:absolute;inset:0}
+#status{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;z-index:5;white-space:pre-line}
+#status.hidden{display:none}
+.tabs{display:flex;border-top:2px solid #c9a227;background:#1a1520}
+.tabs button{flex:1;padding:12px;background:none;border:none;color:#b0a090}
+.tabs button.on{color:#c9a227}
+.panel{display:none;padding:12px}.panel.on{display:block}
+#map-panel{display:none;flex-direction:column;flex:1;min-height:0}
+#map-panel.on{display:flex}
+.tools{display:flex;gap:8px;padding:8px;background:#2a2235}
+.tools button{flex:1;padding:8px;background:#1e1830;border:1px solid #5a4a6a;color:#f0e6d0;border-radius:4px}
+</style></head><body>
+<div id="app">
+<header>旅の冒険の書</header>
+<div id="home" class="panel on">
+<p>ホーム（地図タブを開いてください）</p>
+<p style="color:#b0a090;font-size:14px">Leafletを複数CDNから読み込みます。地図タブを開いて確認してください。</p>
+</div>
+<div id="map-panel" class="panel">
+<div class="tools"><button type="button" id="btn-yokohama">横浜へ</button><button type="button" id="btn-tokyo">東京へ</button></div>
+<div id="mapwrap"><div id="map"></div><div id="status">準備中…</div></div>
+</div>
+<div class="tabs">
+<button type="button" class="on" data-t="home">ホーム</button>
+<button type="button" data-t="map-panel">地図</button>
+</div>
+</div>
+<script>
+(function(){
+var map, ready=false, status=document.getElementById('status');
+function setS(m,h){if(h)status.classList.add('hidden');else{status.textContent=m;status.classList.remove('hidden');}}
+var CSS=['https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css','https://unpkg.com/leaflet@1.9.4/dist/leaflet.css','https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css'];
+var JS=['https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js','https://unpkg.com/leaflet@1.9.4/dist/leaflet.js','https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js'];
+function loadCss(u){return new Promise(function(r){var l=document.createElement('link');l.rel='stylesheet';l.href=u;l.onload=r;l.onerror=r;document.head.appendChild(l);setTimeout(r,1000);});}
+function loadJs(u){return new Promise(function(r,j){var s=document.createElement('script');s.src=u;s.onload=r;s.onerror=function(){j(new Error(u));};document.head.appendChild(s);});}
+function ensureL(){if(typeof L!=='undefined')return Promise.resolve('ok');return (async function(){var e=null;for(var i=0;i<JS.length;i++){try{await loadCss(CSS[i]);await loadJs(JS[i]);if(typeof L!=='undefined')return JS[i];}catch(x){e=x;}}throw e||new Error('fail');})();}
+function init(){if(ready){map.invalidateSize(true);return;}setS('地図ライブラリを読み込み中…');ensureL().then(function(s){console.log(s);try{map=L.map('map').setView([35.45,139.64],11);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'OSM'}).addTo(map);L.marker([35.447,139.642]).addTo(map).bindPopup('横浜中華街');L.marker([35.3606,138.7274]).addTo(map).bindPopup('富士山付近');ready=true;setTimeout(function(){map.invalidateSize(true);setS('',true);},150);setTimeout(function(){map.invalidateSize(true);},500);}catch(err){setS('初期化失敗: '+err.message);}}).catch(function(err){setS('読み込み失敗\n'+err+'\n\n別URL: raw.githack.com を試す');});}
+document.querySelectorAll('.tabs button').forEach(function(b){b.onclick=function(){document.querySelectorAll('.tabs button').forEach(function(x){x.classList.remove('on');});b.classList.add('on');document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('on');});document.getElementById(b.dataset.t).classList.add('on');if(b.dataset.t==='map-panel')setTimeout(init,80);};});
+document.getElementById('btn-yokohama').onclick=function(){if(map)map.setView([35.45,139.64],12);};
+document.getElementById('btn-tokyo').onclick=function(){if(map)map.setView([35.68,139.76],11);};
+})();
+</script>
+</body></html>
