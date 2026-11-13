@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>旅の冒険の書</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" onerror="window.__leafletCssFailed=true">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
   <style>
 :root {
   --bg-dark: #1a1520;
@@ -14,38 +14,56 @@
   --border-light: #5a4a6a;
   --text-main: #f0e6d0;
   --text-sub: #b0a090;
-  --accent-blue: #4a90d9;
-  --slime-blue: #6ec6ff;
+  --header-h: 48px;
+  --tab-h: 56px;
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 html, body {
-  height: 100%; overflow: hidden;
+  height: 100%; height: 100dvh;
+  overflow: hidden;
   font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", Meiryo, sans-serif;
   background: var(--bg-dark); color: var(--text-main); font-size: 15px; line-height: 1.5;
 }
 #app {
-  display: flex; flex-direction: column; height: 100%; max-width: 480px;
-  margin: 0 auto; position: relative; background: var(--bg-dark);
+  display: flex; flex-direction: column;
+  height: 100%; height: 100dvh;
+  max-width: 480px; margin: 0 auto;
+  position: relative; background: var(--bg-dark);
 }
 .app-header {
-  flex-shrink: 0;
+  flex-shrink: 0; height: var(--header-h);
   background: linear-gradient(180deg, #2d2438 0%, #1e1830 100%);
   border-bottom: 2px solid var(--border-gold);
-  padding: 10px 16px; text-align: center;
+  display: flex; align-items: center; justify-content: center;
 }
 .app-title {
-  font-size: 1.15rem; font-weight: 700; letter-spacing: 0.08em;
+  font-size: 1.1rem; font-weight: 700; letter-spacing: 0.08em;
   color: var(--border-gold); text-shadow: 0 0 8px rgba(201, 162, 39, 0.4);
 }
 #main-content {
-  flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: 80px;
+  flex: 1 1 auto;
+  overflow-y: auto; -webkit-overflow-scrolling: touch;
+  padding-bottom: calc(var(--tab-h) + var(--safe-bottom));
   position: relative;
+  min-height: 0; /* flex子のオーバーフロー用 */
 }
-.tab-panel { display: none; padding: 12px; animation: fadeIn 0.2s ease; }
+.tab-panel { display: none; padding: 12px; }
 .tab-panel.active { display: block; }
-#tab-map.active { display: flex; flex-direction: column; padding: 0; height: 100%; }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* 地図タブは一杯で高さを確保 */
+#tab-map {
+  display: none;
+  padding: 0;
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  bottom: calc(var(--tab-h) + var(--safe-bottom));
+  height: auto;
+  flex-direction: column;
+}
+#tab-map.active {
+  display: flex;
+}
 
 .status-window {
   background: var(--bg-window); border: 2px solid var(--border-gold); border-radius: 4px;
@@ -63,14 +81,14 @@ html, body {
   display: flex; gap: 10px; background: var(--bg-panel); border: 2px solid var(--border-light);
   border-radius: 6px; padding: 12px; margin-bottom: 14px; align-items: flex-start;
 }
-.slime-icon { font-size: 2rem; flex-shrink: 0; line-height: 1; filter: drop-shadow(0 0 4px var(--slime-blue)); }
+.slime-icon { font-size: 2rem; flex-shrink: 0; line-height: 1; filter: drop-shadow(0 0 4px #6ec6ff); }
 .slime-message { font-size: 0.9rem; color: var(--text-main); line-height: 1.55; }
 
 .section-box {
   background: var(--bg-panel); border: 1px solid var(--border-light); border-radius: 6px;
   padding: 12px; margin-bottom: 12px;
 }
-.section-title { font-size: 0.88rem; font-weight: 700; color: var(--border-gold); margin-bottom: 8px; letter-spacing: 0.04em; }
+.section-title { font-size: 0.88rem; font-weight: 700; color: var(--border-gold); margin-bottom: 8px; }
 .quest-card { background: var(--bg-window); border-radius: 4px; padding: 10px 12px; }
 .quest-card.dummy { opacity: 0.7; }
 .quest-name { font-weight: 600; margin-bottom: 2px; }
@@ -94,14 +112,14 @@ html, body {
 
 .placeholder-panel {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  min-height: 50vh; text-align: center; padding: 40px 20px; color: var(--text-sub);
+  min-height: 40vh; text-align: center; padding: 40px 20px; color: var(--text-sub);
 }
 .placeholder-icon { font-size: 3rem; margin-bottom: 12px; opacity: 0.7; }
 .placeholder-title { font-size: 1.2rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px; }
 .placeholder-text { font-size: 0.9rem; line-height: 1.6; }
 .placeholder-text small { color: var(--border-light); }
 
-/* ===== 地図タブ ===== */
+/* ===== 地図 ===== */
 .map-toolbar {
   flex-shrink: 0;
   display: flex; gap: 8px; padding: 8px 10px;
@@ -116,30 +134,35 @@ html, body {
 }
 .map-tool-btn.active {
   border-color: var(--border-gold); color: var(--border-gold);
-  box-shadow: 0 0 0 1px var(--border-gold);
 }
 #map-container {
-  flex: 1; min-height: 280px; width: 100%;
-  background: #1a1520;
+  flex: 1 1 auto;
   position: relative;
+  min-height: 200px;
+  width: 100%;
+  background: #2a2235;
 }
 #map {
-  width: 100%; height: 100%;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   z-index: 1;
+  background: #1a3040;
 }
-.map-error {
-  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+.map-status {
+  position: absolute; inset: 0; z-index: 5;
+  display: flex; align-items: center; justify-content: center;
   background: var(--bg-dark); color: var(--text-sub); text-align: center; padding: 20px;
-  z-index: 5;
+  font-size: 0.9rem;
 }
-.map-error.hidden { display: none; }
+.map-status.hidden { display: none; }
 
-/* ルーラ・さくせんパネル */
 .map-panel {
   position: absolute; left: 10px; right: 10px; top: 52px;
   background: var(--bg-panel); border: 2px solid var(--border-gold);
   border-radius: 6px; padding: 12px; z-index: 20;
-  max-height: 55%; overflow-y: auto;
+  max-height: 50%; overflow-y: auto;
   box-shadow: 0 6px 20px rgba(0,0,0,0.45);
 }
 .map-panel.hidden { display: none; }
@@ -150,15 +173,11 @@ html, body {
 .map-panel-close {
   background: none; border: none; color: var(--text-sub); font-size: 1.2rem; cursor: pointer; line-height: 1;
 }
-.pref-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
-}
+.pref-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 .pref-btn {
   padding: 8px 6px; border: 1px solid var(--border-light); border-radius: 4px;
   background: var(--bg-window); color: var(--text-main); font-size: 0.8rem; cursor: pointer;
 }
-.pref-btn:active { background: #3a3048; }
-
 .filter-group { margin-bottom: 12px; }
 .filter-label { font-size: 0.78rem; color: var(--text-sub); margin-bottom: 6px; }
 .filter-chips { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -172,58 +191,55 @@ html, body {
 .filter-actions { display: flex; gap: 8px; margin-top: 8px; }
 .filter-actions .dq-button { flex: 1; padding: 8px; font-size: 0.82rem; }
 
-/* ピンポップ */
 .leaflet-popup-content-wrapper {
   background: var(--bg-panel) !important;
   color: var(--text-main) !important;
   border: 2px solid var(--border-gold);
   border-radius: 6px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
 }
 .leaflet-popup-tip { background: var(--bg-panel) !important; }
 .leaflet-popup-content { margin: 10px 12px !important; font-size: 0.88rem; }
 .pin-popup-name { font-weight: 700; margin-bottom: 4px; color: var(--border-gold); }
 .pin-popup-meta { color: var(--text-sub); font-size: 0.8rem; line-height: 1.4; }
 .pin-popup-stars { color: #e8c547; margin: 4px 0; }
-
-/* カテゴリピン色 */
 .pin-dot {
   width: 16px; height: 16px; border-radius: 50%;
   border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.45);
 }
 .pin-dot.gold {
   width: 18px; height: 18px;
-  background: #e8c547 !important;
   border-color: #fff8c8;
   box-shadow: 0 0 8px rgba(232, 197, 71, 0.8), 0 1px 4px rgba(0,0,0,0.4);
 }
 
 .fab-record {
-  position: fixed; right: 16px; bottom: calc(64px + var(--safe-bottom) + 12px);
+  position: fixed; right: 16px;
+  bottom: calc(var(--tab-h) + var(--safe-bottom) + 12px);
   width: 64px; height: 64px; border-radius: 50%; border: 3px solid var(--border-gold);
   background: linear-gradient(145deg, #3d8fd9, #2a6bb5); color: #fff;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.45), 0 0 0 1px #000; z-index: 50;
+  cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.45); z-index: 50;
 }
 .fab-record:active { transform: scale(0.92); }
 .fab-icon { font-size: 1.5rem; font-weight: 700; line-height: 1; }
-.fab-label { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.05em; margin-top: 1px; }
+.fab-label { font-size: 0.65rem; font-weight: 600; margin-top: 1px; }
 
 .tab-bar {
   position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
-  width: 100%; max-width: 480px; display: flex;
+  width: 100%; max-width: 480px; height: calc(var(--tab-h) + var(--safe-bottom));
+  display: flex; align-items: flex-start;
   background: linear-gradient(180deg, #2a2235 0%, #1a1520 100%);
-  border-top: 2px solid var(--border-gold); padding-bottom: var(--safe-bottom); z-index: 40;
+  border-top: 2px solid var(--border-gold);
+  padding-bottom: var(--safe-bottom); z-index: 40;
 }
 .tab-btn {
   flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 2px; padding: 8px 4px 10px; background: transparent; border: none;
+  gap: 2px; height: var(--tab-h); background: transparent; border: none;
   color: var(--text-sub); cursor: pointer;
 }
 .tab-btn.active { color: var(--border-gold); }
-.tab-btn.active .tab-icon { filter: drop-shadow(0 0 4px rgba(201, 162, 39, 0.5)); }
 .tab-icon { font-size: 1.25rem; line-height: 1; }
-.tab-label { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.02em; }
+.tab-label { font-size: 0.7rem; font-weight: 600; }
 
 .modal {
   position: fixed; inset: 0; background: rgba(0,0,0,0.65);
@@ -232,51 +248,38 @@ html, body {
 .modal.hidden { display: none; }
 .modal-content {
   background: var(--bg-panel); border: 2px solid var(--border-gold); border-radius: 6px;
-  width: 100%; max-width: 360px; box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  width: 100%; max-width: 360px;
 }
 .modal-header {
   display: flex; justify-content: space-between; align-items: center;
   padding: 12px 14px; border-bottom: 1px solid var(--border-light);
   font-weight: 700; color: var(--border-gold);
 }
-.modal-close { background: none; border: none; color: var(--text-sub); font-size: 1.4rem; cursor: pointer; line-height: 1; padding: 0 4px; }
+.modal-close { background: none; border: none; color: var(--text-sub); font-size: 1.4rem; cursor: pointer; }
 .modal-body { padding: 24px 16px; text-align: center; }
 .coming-soon { color: var(--text-sub); font-size: 0.95rem; }
-
-/* 地図タブ時はメインのパディングを減らす */
-body.map-open #main-content { padding-bottom: 64px; }
-body.map-open .fab-record { opacity: 0.92; }
   </style>
 </head>
 <body>
   <div id="app">
-
     <header class="app-header">
       <h1 class="app-title">旅の冒険の書</h1>
     </header>
 
     <main id="main-content">
-
-      <!-- ホーム -->
       <section id="tab-home" class="tab-panel active">
         <div class="status-window">
-          <div class="status-row"><span class="status-label">Lv</span><span class="status-value" id="status-lv">1</span></div>
-          <div class="status-row"><span class="status-label">制覇した町</span><span class="status-value" id="status-towns">0</span></div>
-          <div class="status-row"><span class="status-label">アイテム</span><span class="status-value" id="status-items">0</span></div>
-          <div class="status-row"><span class="status-label">たからもの</span><span class="status-value" id="status-treasures">0</span></div>
-          <div class="exp-bar-wrap"><div class="exp-bar" id="exp-bar" style="width:15%"></div></div>
+          <div class="status-row"><span class="status-label">Lv</span><span class="status-value">1</span></div>
+          <div class="status-row"><span class="status-label">制覇した町</span><span class="status-value">0</span></div>
+          <div class="status-row"><span class="status-label">アイテム</span><span class="status-value">0</span></div>
+          <div class="status-row"><span class="status-label">たからもの</span><span class="status-value">0</span></div>
+          <div class="exp-bar-wrap"><div class="exp-bar" style="width:15%"></div></div>
           <div class="exp-text">次のレベルまで 15 / 100</div>
         </div>
-
         <div class="slime-guide">
           <div class="slime-icon">🐍</div>
-          <div class="slime-message" id="slime-message">
-            ようこそ！ここは「旅の冒険の書」だよ。<br>
-            まだ記録がないようだね。<br>
-            右下の「＋」から、教会できろくしてみよう！
-          </div>
+          <div class="slime-message">ようこそ！ここは「旅の冒険の書」だよ。<br>まだ記録がないようだね。<br>右下の「＋」から、教会できろくしてみよう！</div>
         </div>
-
         <div class="section-box">
           <div class="section-title">🎒 冒険中の旅</div>
           <div class="quest-card dummy">
@@ -284,19 +287,14 @@ body.map-open .fab-record { opacity: 0.92; }
             <div class="quest-meta">旅を作成するとここに表示されます</div>
           </div>
         </div>
-
         <div class="section-box">
           <div class="section-title">📝 最近の記録</div>
           <div class="empty-message">まだ記録がありません</div>
         </div>
-
         <div class="section-box">
           <div class="section-title">🗺️ 制覇コーナー</div>
           <div class="conquest-summary">
-            <div class="conquest-num">
-              <span class="big-num" id="conquest-count">0</span>
-              <span class="unit">町</span>
-            </div>
+            <div class="conquest-num"><span class="big-num">0</span><span class="unit">町</span></div>
             <div class="conquest-pref">
               <div class="pref-row"><span>東京都</span><span>0 / 62</span></div>
               <div class="pref-row"><span>神奈川県</span><span>0 / 33</span></div>
@@ -307,7 +305,6 @@ body.map-open .fab-record { opacity: 0.92; }
         </div>
       </section>
 
-      <!-- 地図 -->
       <section id="tab-map" class="tab-panel">
         <div class="map-toolbar">
           <button class="map-tool-btn" id="btn-rulora" type="button">🌍 ルーラ</button>
@@ -315,12 +312,8 @@ body.map-open .fab-record { opacity: 0.92; }
         </div>
         <div id="map-container">
           <div id="map"></div>
-          <div id="map-error" class="map-error hidden">
-            地図の読み込みに失敗しました<br>
-            <small>ネット環境を確認してください</small>
-          </div>
+          <div id="map-status" class="map-status">地図を読み込み中…</div>
 
-          <!-- ルーラパネル -->
           <div id="panel-rulora" class="map-panel hidden">
             <div class="map-panel-title">
               <span>ルーラ（地域へジャンプ）</span>
@@ -329,7 +322,6 @@ body.map-open .fab-record { opacity: 0.92; }
             <div class="pref-grid" id="pref-grid"></div>
           </div>
 
-          <!-- さくせんパネル -->
           <div id="panel-sakusen" class="map-panel hidden">
             <div class="map-panel-title">
               <span>さくせん（絞り込み）</span>
@@ -354,58 +346,51 @@ body.map-open .fab-record { opacity: 0.92; }
         </div>
       </section>
 
-      <!-- 旅 -->
       <section id="tab-quests" class="tab-panel">
         <div class="placeholder-panel">
           <div class="placeholder-icon">🎒</div>
           <div class="placeholder-title">旅（クエスト）</div>
-          <div class="placeholder-text">クエスト一覧と<br>旅の詳細（タイムライン）を実装予定<br><small>（フェーズ3）</small></div>
+          <div class="placeholder-text">フェーズ3で実装予定</div>
         </div>
       </section>
 
-      <!-- 図鑑 -->
       <section id="tab-zukan" class="tab-panel">
         <div class="placeholder-panel">
           <div class="placeholder-icon">📜</div>
           <div class="placeholder-title">図鑑</div>
-          <div class="placeholder-text">お土産コレクションを<br>図鑑形式で表示予定<br><small>（フェーズ3）</small></div>
+          <div class="placeholder-text">フェーズ3で実装予定</div>
         </div>
       </section>
-
     </main>
 
-    <button id="btn-record" class="fab-record" title="教会で きろくする">
+    <button id="btn-record" class="fab-record" type="button">
       <span class="fab-icon">＋</span>
       <span class="fab-label">きろく</span>
     </button>
 
     <nav class="tab-bar">
-      <button class="tab-btn active" data-tab="home"><span class="tab-icon">🏠</span><span class="tab-label">ホーム</span></button>
-      <button class="tab-btn" data-tab="map"><span class="tab-icon">🗺️</span><span class="tab-label">地図</span></button>
-      <button class="tab-btn" data-tab="quests"><span class="tab-icon">🎒</span><span class="tab-label">旅</span></button>
-      <button class="tab-btn" data-tab="zukan"><span class="tab-icon">📜</span><span class="tab-label">図鑑</span></button>
+      <button class="tab-btn active" data-tab="home" type="button"><span class="tab-icon">🏠</span><span class="tab-label">ホーム</span></button>
+      <button class="tab-btn" data-tab="map" type="button"><span class="tab-icon">🗺️</span><span class="tab-label">地図</span></button>
+      <button class="tab-btn" data-tab="quests" type="button"><span class="tab-icon">🎒</span><span class="tab-label">旅</span></button>
+      <button class="tab-btn" data-tab="zukan" type="button"><span class="tab-icon">📜</span><span class="tab-label">図鑑</span></button>
     </nav>
-
   </div>
 
   <div id="modal-record" class="modal hidden">
     <div class="modal-content">
       <div class="modal-header">
         <span>教会で きろくする</span>
-        <button class="modal-close" id="btn-close-record">×</button>
+        <button class="modal-close" id="btn-close-record" type="button">×</button>
       </div>
-      <div class="modal-body">
-        <p class="coming-soon">記録フォームはフェーズ3で実装予定です</p>
-      </div>
+      <div class="modal-body"><p class="coming-soon">記録フォームはフェーズ3で実装予定です</p></div>
     </div>
   </div>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
 (function () {
   'use strict';
 
-  // ========== ダミーデータ ==========
   var CATEGORIES = [
     { id: 'michi', label: '道の駅', color: '#5cb85c' },
     { id: 'omiyage', label: 'お土産店', color: '#d9534f' },
@@ -428,32 +413,36 @@ body.map-open .fab-record { opacity: 0.92; }
     { name: '沖縄県', lat: 26.21, lng: 127.68, zoom: 10 }
   ];
 
-  // 横浜・神奈川辺りのダミー場所
   var DUMMY_SPOTS = [
     { id: 1, name: '横浜中華街', cat: 'kanko', lat: 35.447, lng: 139.642, stars: 3, wantAgain: true, hasTreasure: false, note: '夕方の景色が美しい' },
     { id: 2, name: 'ミネラルヤード', cat: 'other', lat: 35.455, lng: 139.632, stars: 2, wantAgain: false, hasTreasure: false, note: '' },
     { id: 3, name: '野毛山トップ', cat: 'kanko', lat: 35.3606, lng: 138.7274, stars: 3, wantAgain: true, hasTreasure: true, note: '富士山が美しい' },
     { id: 4, name: '山下甘酒', cat: 'omiyage', lat: 35.361, lng: 138.710, stars: 3, wantAgain: true, hasTreasure: true, note: 'しろへが絶品' },
     { id: 5, name: '道の駅 がんがわ', cat: 'michi', lat: 35.475, lng: 139.280, stars: 2, wantAgain: false, hasTreasure: false, note: '' },
-    { id: 6, name: '温泉宿 範例', cat: 'onsen', lat: 35.232, lng: 139.106, stars: 3, wantAgain: true, hasTreasure: false, note: '鮵沢温泉' },
-    { name: 'カフェ ダミー', cat: 'cafe', lat: 35.443, lng: 139.638, stars: 2, wantAgain: false, hasTreasure: false, note: '', id: 7 },
+    { id: 6, name: '鮵沢温泉', cat: 'onsen', lat: 35.232, lng: 139.106, stars: 3, wantAgain: true, hasTreasure: false, note: '' },
+    { id: 7, name: 'カフェ ダミー', cat: 'cafe', lat: 35.443, lng: 139.638, stars: 2, wantAgain: false, hasTreasure: false, note: '' },
     { id: 8, name: '横須賀山', cat: 'kanko', lat: 35.487, lng: 139.496, stars: 2, wantAgain: false, hasTreasure: false, note: '' },
     { id: 9, name: '江の島', cat: 'kanko', lat: 35.629, lng: 139.810, stars: 2, wantAgain: false, hasTreasure: false, note: '' },
     { id: 10, name: '清水寺', cat: 'kanko', lat: 35.316, lng: 139.536, stars: 3, wantAgain: true, hasTreasure: false, note: '大仏が素晴らしい' }
   ];
 
-  // ========== 状態 ==========
   var map = null;
   var mapReady = false;
-  var markers = [];
   var markerLayer = null;
-  var filters = {
-    categories: {},  // id -> true/false
-    wantAgain: false,
-    treasure: false
-  };
+  var filters = { categories: {}, wantAgain: false, treasure: false };
+  var mapStatus = document.getElementById('map-status');
 
-  // ========== タブ ==========
+  function setMapStatus(msg, hide) {
+    if (!mapStatus) return;
+    if (hide) {
+      mapStatus.classList.add('hidden');
+    } else {
+      mapStatus.textContent = msg;
+      mapStatus.classList.remove('hidden');
+    }
+  }
+
+  // タブ
   var tabButtons = document.querySelectorAll('.tab-btn');
   var tabPanels = document.querySelectorAll('.tab-panel');
 
@@ -464,19 +453,18 @@ body.map-open .fab-record { opacity: 0.92; }
     tabPanels.forEach(function (panel) {
       panel.classList.toggle('active', panel.id === 'tab-' + tabName);
     });
-    document.body.classList.toggle('map-open', tabName === 'map');
-
-    if (tabName === 'map') {
-      ensureMap();
-    }
     closeMapPanels();
+    if (tabName === 'map') {
+      // 表示後に初期化（高さが0のままinitするのを防ぐ）
+      setTimeout(function () { ensureMap(); }, 80);
+    }
   }
 
   tabButtons.forEach(function (btn) {
     btn.addEventListener('click', function () { switchTab(btn.dataset.tab); });
   });
 
-  // ========== 記録モーダル ==========
+  // 記録モーダル
   var btnRecord = document.getElementById('btn-record');
   var modalRecord = document.getElementById('modal-record');
   var btnCloseRecord = document.getElementById('btn-close-record');
@@ -488,34 +476,26 @@ body.map-open .fab-record { opacity: 0.92; }
     });
   }
 
-  // ========== 地図 ==========
-  function catColor(catId) {
-    for (var i = 0; i < CATEGORIES.length; i++) {
-      if (CATEGORIES[i].id === catId) return CATEGORIES[i].color;
-    }
+  function catColor(id) {
+    for (var i = 0; i < CATEGORIES.length; i++) if (CATEGORIES[i].id === id) return CATEGORIES[i].color;
     return '#95a5a6';
   }
-
-  function catLabel(catId) {
-    for (var i = 0; i < CATEGORIES.length; i++) {
-      if (CATEGORIES[i].id === catId) return CATEGORIES[i].label;
-    }
-    return catId;
+  function catLabel(id) {
+    for (var i = 0; i < CATEGORIES.length; i++) if (CATEGORIES[i].id === id) return CATEGORIES[i].label;
+    return id;
   }
-
   function starsHtml(n) {
     var s = '';
-    for (var i = 0; i < 3; i++) s += i < n ? '★' : '☆';
+    for (var i = 0; i < 3; i++) s += (i < n ? '★' : '☆');
     return s;
   }
 
   function createIcon(spot) {
-    var color = spot.wantAgain ? null : catColor(spot.cat);
-    var goldClass = spot.wantAgain ? ' gold' : '';
-    var bg = spot.wantAgain ? '#e8c547' : color;
+    var bg = spot.wantAgain ? '#e8c547' : catColor(spot.cat);
+    var gold = spot.wantAgain ? ' gold' : '';
     return L.divIcon({
       className: '',
-      html: '<div class="pin-dot' + goldClass + '" style="background:' + bg + '"></div>',
+      html: '<div class="pin-dot' + gold + '" style="background:' + bg + '"></div>',
       iconSize: [18, 18],
       iconAnchor: [9, 9],
       popupAnchor: [0, -10]
@@ -526,16 +506,13 @@ body.map-open .fab-record { opacity: 0.92; }
     return '<div class="pin-popup-name">' + spot.name + '</div>' +
       '<div class="pin-popup-meta">' + catLabel(spot.cat) +
       (spot.wantAgain ? ' · また行きたい' : '') +
-      (spot.hasTreasure ? ' · たからもの' : '') +
-      '</div>' +
+      (spot.hasTreasure ? ' · たからもの' : '') + '</div>' +
       '<div class="pin-popup-stars">' + starsHtml(spot.stars) + '</div>' +
       (spot.note ? '<div class="pin-popup-meta">' + spot.note + '</div>' : '');
   }
 
   function matchesFilter(spot) {
-    // カテゴリ: 何も選んでいなければ全部OK、選んでいればOR
-    var anyCat = false;
-    var catOk = false;
+    var anyCat = false, catOk = false;
     for (var k in filters.categories) {
       if (filters.categories[k]) {
         anyCat = true;
@@ -551,26 +528,37 @@ body.map-open .fab-record { opacity: 0.92; }
   function renderMarkers() {
     if (!map || !markerLayer) return;
     markerLayer.clearLayers();
-    markers = [];
     DUMMY_SPOTS.forEach(function (spot) {
       if (!matchesFilter(spot)) return;
       var m = L.marker([spot.lat, spot.lng], { icon: createIcon(spot) });
       m.bindPopup(popupHtml(spot));
       m.addTo(markerLayer);
-      markers.push(m);
     });
   }
 
   function ensureMap() {
     if (mapReady) {
-      setTimeout(function () { if (map) map.invalidateSize(); }, 50);
+      try { map.invalidateSize(true); } catch (e) {}
       return;
     }
+
     if (typeof L === 'undefined') {
-      document.getElementById('map-error').classList.remove('hidden');
+      setMapStatus('地図ライブラリの読み込みに失敗しました\nネット環境を確認してください');
       return;
     }
+
+    var el = document.getElementById('map');
+    if (!el) return;
+
+    // 高さが0だと地図が消えるので確認
+    var box = document.getElementById('map-container');
+    if (box && box.clientHeight < 50) {
+      setMapStatus('地図領域の高さが取れていません。再読み込みしてください');
+      return;
+    }
+
     try {
+      setMapStatus('地図を初期化中…');
       map = L.map('map', {
         zoomControl: true,
         attributionControl: true
@@ -585,15 +573,17 @@ body.map-open .fab-record { opacity: 0.92; }
       renderMarkers();
       mapReady = true;
 
-      // タブ表示後にサイズ再計算
-      setTimeout(function () { map.invalidateSize(); }, 100);
-    } catch (e) {
-      console.error(e);
-      document.getElementById('map-error').classList.remove('hidden');
+      // 複数回 invalidate（スマホで必要なことが多い）
+      setTimeout(function () { map.invalidateSize(true); setMapStatus('', true); }, 100);
+      setTimeout(function () { map.invalidateSize(true); }, 400);
+      setTimeout(function () { map.invalidateSize(true); }, 1000);
+    } catch (err) {
+      console.error(err);
+      setMapStatus('地図の初期化に失敗: ' + (err && err.message ? err.message : 'unknown'));
     }
   }
 
-  // ========== ルーラ ==========
+  // ルーラ / さくせん
   var panelRulora = document.getElementById('panel-rulora');
   var panelSakusen = document.getElementById('panel-sakusen');
   var btnRulora = document.getElementById('btn-rulora');
@@ -622,32 +612,22 @@ body.map-open .fab-record { opacity: 0.92; }
   btnRulora.addEventListener('click', function () {
     var open = panelRulora.classList.contains('hidden');
     closeMapPanels();
-    if (open) {
-      panelRulora.classList.remove('hidden');
-      btnRulora.classList.add('active');
-    }
+    if (open) { panelRulora.classList.remove('hidden'); btnRulora.classList.add('active'); }
   });
-
   btnSakusen.addEventListener('click', function () {
     var open = panelSakusen.classList.contains('hidden');
     closeMapPanels();
-    if (open) {
-      panelSakusen.classList.remove('hidden');
-      btnSakusen.classList.add('active');
-    }
+    if (open) { panelSakusen.classList.remove('hidden'); btnSakusen.classList.add('active'); }
   });
-
   document.querySelectorAll('[data-close]').forEach(function (btn) {
     btn.addEventListener('click', closeMapPanels);
   });
 
-  // ========== さくせん ==========
   var filterCatEl = document.getElementById('filter-categories');
   CATEGORIES.forEach(function (c) {
     var b = document.createElement('button');
     b.type = 'button';
     b.className = 'chip';
-    b.dataset.cat = c.id;
     b.textContent = c.label;
     b.addEventListener('click', function () {
       b.classList.toggle('active');
@@ -655,25 +635,18 @@ body.map-open .fab-record { opacity: 0.92; }
     });
     filterCatEl.appendChild(b);
   });
-
   document.querySelectorAll('[data-filter]').forEach(function (btn) {
     btn.addEventListener('click', function () {
       btn.classList.toggle('active');
-      var key = btn.dataset.filter;
-      filters[key] = btn.classList.contains('active');
+      filters[btn.dataset.filter] = btn.classList.contains('active');
     });
   });
-
   document.getElementById('btn-filter-apply').addEventListener('click', function () {
-    renderMarkers();
-    closeMapPanels();
+    renderMarkers(); closeMapPanels();
   });
-
   document.getElementById('btn-filter-reset').addEventListener('click', function () {
     filters = { categories: {}, wantAgain: false, treasure: false };
-    document.querySelectorAll('#panel-sakusen .chip').forEach(function (c) {
-      c.classList.remove('active');
-    });
+    document.querySelectorAll('#panel-sakusen .chip').forEach(function (c) { c.classList.remove('active'); });
     renderMarkers();
   });
 
