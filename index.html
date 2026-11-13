@@ -8,7 +8,7 @@
 </head>
 <body>
 <div id="app">
-<header class="app-header"><h1 class="app-title">旅の冒険の書</h1></header>
+<header class="app-header"><img class="title-slime" src="assets/slime.png" alt="" onerror="this.style.display='none'"><h1 class="app-title">旅の冒険の書</h1></header>
 <main id="main-content">
 <section id="tab-home" class="tab-panel active">
 <div class="status-window">
@@ -19,12 +19,21 @@
 <div class="exp-bar-wrap"><div class="exp-bar" id="st-expbar"></div></div>
 <div class="exp-text" id="st-exptext">次のレベルまで 0 / 100</div>
 </div>
-<div class="slime-guide"><div class="slime-icon">🐍</div><div id="slime-msg">ようこそ！</div></div>
+<div class="slime-guide"><div class="slime-icon"><img class="slime-img" src="assets/slime.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><span class="slime-emoji" style="display:none">🩵</span></div><div id="slime-msg">ようこそ！</div></div>
 <div class="section-box"><div class="section-title">🎒 冒険中の旅</div><div id="home-trips"></div></div>
 <div class="section-box"><div class="section-title">📝 最近の記録</div><div id="home-recent"></div></div>
 <div class="section-box"><div class="section-title">🗺️ 制覇コーナー</div>
 <div class="conquest-summary"><div><span class="big-num" id="st-towns2">0</span><span class="unit">町</span></div>
 <div class="conquest-pref" id="pref-progress"></div></div>
+<button class="dq-button secondary" id="btn-conquest-open" type="button">制覇マップを見る</button>
+<div class="mini-map-hint">町の数は、場所の「市区町村」から数えています。未入力の場所は数に入りません。</div>
+</div>
+<div class="section-box"><div class="section-title">📕 冒険の書の管理</div>
+<button class="dq-button secondary" id="btn-export" type="button">データを書き出す（バックアップ）</button>
+<button class="dq-button secondary" id="btn-import" type="button" style="margin-top:8px">データを読み込む</button>
+<input type="file" id="file-import" accept=".json,application/json" style="display:none">
+<button class="dq-button danger" id="btn-wipe" type="button" style="margin-top:8px">全データを消す</button>
+<div class="mini-map-hint">記録はこの端末の中（localStorage）に保存されています。機種変更やGAS移植の前に、書き出しを残してください。</div>
 </div>
 </section>
 <section id="tab-map" class="tab-panel">
@@ -42,6 +51,8 @@
 </div>
 <div id="panel-sakusen" class="map-panel hidden">
 <div class="map-panel-title"><span>さくせん</span><button class="map-panel-close" data-close type="button">×</button></div>
+<div class="filter-group"><div class="filter-label">名前で探す</div><input class="form-input" id="filter-q" type="text" placeholder="場所の名前"></div>
+<div class="filter-group"><div class="filter-label">旅</div><select class="form-select" id="filter-trip"><option value="">すべての旅</option></select></div>
 <div class="filter-group"><div class="filter-label">カテゴリ</div><div class="filter-chips" id="filter-categories"></div></div>
 <div class="filter-group"><div class="filter-label">その他</div><div class="filter-chips">
 <button class="chip" data-filter="wantAgain" type="button">また行きたいだけ</button>
@@ -91,6 +102,14 @@
 <div class="form-group"><label class="form-label">緯度</label><input class="form-input" id="f-lat" type="text" placeholder="35.45" inputmode="decimal"></div>
 <div class="form-group"><label class="form-label">経度</label><input class="form-input" id="f-lng" type="text" placeholder="139.64" inputmode="decimal"></div>
 </div>
+<div class="form-group"><label class="form-label">行った日</label><input class="form-input" id="f-date" type="date"></div>
+<div class="form-row">
+<div class="form-group"><label class="form-label">都道府県</label><select class="form-select" id="f-pref"></select></div>
+<div class="form-group"><label class="form-label">市区町村（制覇に数えます）</label><input class="form-input" id="f-city" type="text" placeholder="例：青梅市"></div>
+</div>
+<div class="form-group"><label class="form-label">住所</label><input class="form-input" id="f-address" type="text" placeholder="例：東京都青梅市…"></div>
+<div class="form-group"><label class="form-label">紹介URL</label><input class="form-input" id="f-url" type="url" placeholder="https://…"></div>
+<div class="form-group"><label class="form-label">写真URL（1行に1つ・任意）</label><textarea class="form-textarea" id="f-photos" placeholder="Googleフォト等でコピーした画像URLを貼れます"></textarea></div>
 <div class="form-group"><label class="form-label">評価</label>
 <div class="star-pick" id="f-stars">
 <button type="button" class="star-btn" data-s="1">★</button>
@@ -106,11 +125,21 @@
 </div></div></div>
 <div id="modal-trip" class="modal hidden">
 <div class="modal-content">
-<div class="modal-header"><span>🍺 新しい旅</span><button class="modal-close" id="btn-close-trip" type="button">×</button></div>
+<div class="modal-header"><span id="trip-modal-title">🍺 新しい旅</span><button class="modal-close" id="btn-close-trip" type="button">×</button></div>
 <div class="modal-body">
 <div class="form-group"><label class="form-label">旅の名前 *</label><input class="form-input" id="t-name" type="text"></div>
+<div class="form-group"><label class="form-label">種類</label><select class="form-select" id="t-type">
+<option value="家族旅行">家族旅行</option><option value="出張">出張</option><option value="日帰り">日帰り</option><option value="その他">その他</option>
+</select></div>
+<div class="form-row">
 <div class="form-group"><label class="form-label">開始日</label><input class="form-input" id="t-date" type="date"></div>
+<div class="form-group"><label class="form-label">終了日</label><input class="form-input" id="t-end" type="date"></div>
+</div>
+<div class="form-group"><label class="form-label">パーティ（一緒に行った人）</label><div class="party-checks" id="t-party"></div></div>
+<div class="form-group"><label class="form-label">Googleフォト アルバムURL</label><input class="form-input" id="t-album" type="url" placeholder="https://photos.app.goo.gl/…"></div>
+<div class="form-group"><label class="form-label">メモ</label><textarea class="form-textarea" id="t-note"></textarea></div>
 <button class="dq-button" id="btn-save-trip" type="button">旅を作る</button>
+<button class="dq-button danger hidden" id="btn-delete-trip" type="button" style="margin-top:8px">この旅を削除する</button>
 </div></div></div>
 <div id="modal-item" class="modal hidden">
 <div class="modal-content">
@@ -132,6 +161,7 @@
 </div></div>
 <label class="check-row"><input type="checkbox" id="i-treasure"> たからもの（また買う）</label>
 <div class="form-group"><label class="form-label">メモ（誰が喜んだか など）</label><textarea class="form-textarea" id="i-note"></textarea></div>
+<div class="form-group"><label class="form-label">写真URL（1行に1つ・任意）</label><textarea class="form-textarea" id="i-photos"></textarea></div>
 <button class="dq-button" id="btn-save-item" type="button" style="margin-top:8px">変更を保存する</button>
 </div></div></div>
 <div id="modal-detail" class="modal hidden">
@@ -139,6 +169,24 @@
 <div class="modal-header"><span id="detail-title">場所の詳細</span><button class="modal-close" id="btn-close-detail" type="button">×</button></div>
 <div class="modal-body" id="detail-body"></div>
 </div></div>
+<div id="modal-conquest" class="modal hidden">
+<div class="modal-content">
+<div class="modal-header"><span>🗺️ 制覇マップ</span><button class="modal-close" id="btn-close-conquest" type="button">×</button></div>
+<div class="modal-body">
+<div class="conquest-summary" style="margin-bottom:10px"><div><span class="big-num" id="cq-towns">0</span><span class="unit">町 制覇</span></div><div class="conquest-pref" id="cq-summary"></div></div>
+<div class="tile-map" id="tile-map"></div>
+<div class="mini-map-hint">色のついた都道府県を押すと、制覇した町の一覧が出ます。</div>
+<div id="cq-detail"></div>
+</div></div></div>
+<div id="modal-celebration" class="modal hidden">
+<div class="modal-content">
+<div class="modal-body celeb-body">
+<img class="king-img" src="assets/king_slime.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+<div class="king-emoji" style="display:none">👑🩵</div>
+<div class="celeb-title" id="celeb-title">キングスライム あらわる！</div>
+<div class="celeb-msg" id="celeb-msg"></div>
+<button class="dq-button" id="btn-celeb-close" type="button" style="margin-top:14px">やったー！</button>
+</div></div></div>
 <div id="toast" class="toast"></div>
 <script src="app.js"></script>
 </body>

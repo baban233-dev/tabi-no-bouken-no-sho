@@ -21,21 +21,27 @@ var ITEM_CATEGORIES=[
 ];
 var ITEM_FOR_WHOM=['','家用','妻の実家用','職場','自分用','その他'];
 var PREFS=[
-{name:'北海道',lat:43.06,lng:141.35,zoom:8},{name:'東京都',lat:35.68,lng:139.76,zoom:11},
-{name:'神奈川県',lat:35.45,lng:139.64,zoom:11},{name:'静岡県',lat:34.98,lng:138.38,zoom:10},
-{name:'長野県',lat:36.65,lng:138.18,zoom:10},{name:'京都府',lat:35.01,lng:135.77,zoom:12},
-{name:'大阪府',lat:34.69,lng:135.50,zoom:12},{name:'福岡県',lat:33.59,lng:130.40,zoom:11},
-{name:'沖縄県',lat:26.21,lng:127.68,zoom:10}
+{name:'北海道',lat:43.06,lng:141.35,zoom:8},{name:'青森県',lat:40.82,lng:140.75,zoom:10},{name:'岩手県',lat:39.70,lng:141.15,zoom:10},{name:'宮城県',lat:38.27,lng:140.87,zoom:10},{name:'秋田県',lat:39.72,lng:140.10,zoom:10},{name:'山形県',lat:38.24,lng:140.36,zoom:10},{name:'福島県',lat:37.75,lng:140.47,zoom:10},
+{name:'茨城県',lat:36.34,lng:140.45,zoom:10},{name:'栃木県',lat:36.57,lng:139.88,zoom:10},{name:'群馬県',lat:36.39,lng:139.06,zoom:10},{name:'埼玉県',lat:35.86,lng:139.65,zoom:11},{name:'千葉県',lat:35.61,lng:140.12,zoom:11},{name:'東京都',lat:35.68,lng:139.76,zoom:11},{name:'神奈川県',lat:35.45,lng:139.64,zoom:11},
+{name:'新潟県',lat:37.90,lng:139.06,zoom:10},{name:'富山県',lat:36.70,lng:137.21,zoom:10},{name:'石川県',lat:36.59,lng:136.63,zoom:10},{name:'福井県',lat:36.07,lng:136.22,zoom:10},{name:'山梨県',lat:35.66,lng:138.57,zoom:10},{name:'長野県',lat:36.65,lng:138.18,zoom:10},{name:'岐阜県',lat:35.39,lng:136.72,zoom:10},{name:'静岡県',lat:34.98,lng:138.38,zoom:10},{name:'愛知県',lat:35.18,lng:136.91,zoom:11},{name:'三重県',lat:34.73,lng:136.51,zoom:10},
+{name:'滋賀県',lat:35.00,lng:135.87,zoom:10},{name:'京都府',lat:35.01,lng:135.77,zoom:11},{name:'大阪府',lat:34.69,lng:135.50,zoom:11},{name:'兵庫県',lat:34.69,lng:135.20,zoom:11},{name:'奈良県',lat:34.69,lng:135.83,zoom:11},{name:'和歌山県',lat:34.23,lng:135.17,zoom:10},
+{name:'鳥取県',lat:35.50,lng:134.24,zoom:10},{name:'島根県',lat:35.47,lng:133.05,zoom:10},{name:'岡山県',lat:34.66,lng:133.92,zoom:10},{name:'広島県',lat:34.40,lng:132.46,zoom:11},{name:'山口県',lat:34.19,lng:131.47,zoom:10},
+{name:'徳島県',lat:34.07,lng:134.56,zoom:10},{name:'香川県',lat:34.34,lng:134.04,zoom:10},{name:'愛媛県',lat:33.84,lng:132.77,zoom:10},{name:'高知県',lat:33.55,lng:133.53,zoom:10},
+{name:'福岡県',lat:33.59,lng:130.40,zoom:11},{name:'佐賀県',lat:33.25,lng:130.30,zoom:10},{name:'長崎県',lat:32.75,lng:129.87,zoom:10},{name:'熊本県',lat:32.79,lng:130.74,zoom:10},{name:'大分県',lat:33.24,lng:131.61,zoom:10},{name:'宮崎県',lat:31.91,lng:131.42,zoom:10},{name:'鹿児島県',lat:31.56,lng:130.56,zoom:10},{name:'沖縄県',lat:26.21,lng:127.68,zoom:10}
 ];
+var PREF_TOTALS={'北海道':179,'青森県':40,'岩手県':33,'宮城県':35,'秋田県':25,'山形県':35,'福島県':59,'茨城県':44,'栃木県':25,'群馬県':35,'埼玉県':63,'千葉県':54,'東京都':62,'神奈川県':33,'新潟県':30,'富山県':15,'石川県':19,'福井県':17,'山梨県':27,'長野県':77,'岐阜県':42,'静岡県':35,'愛知県':54,'三重県':29,'滋賀県':19,'京都府':26,'大阪府':43,'兵庫県':41,'奈良県':39,'和歌山県':30,'鳥取県':19,'島根県':19,'岡山県':27,'広島県':23,'山口県':19,'徳島県':24,'香川県':17,'愛媛県':20,'高知県':34,'福岡県':60,'佐賀県':20,'長崎県':21,'熊本県':45,'大分県':18,'宮崎県':26,'鹿児島県':43,'沖縄県':41};
+var TILE_POS={'北海道':[10,0],'青森県':[10,1],'秋田県':[9,2],'岩手県':[10,2],'山形県':[9,3],'宮城県':[10,3],'福島県':[10,4],'茨城県':[10,5],'栃木県':[9,5],'群馬県':[8,5],'新潟県':[8,4],'埼玉県':[9,6],'千葉県':[10,6],'東京都':[9,7],'神奈川県':[8,7],'富山県':[7,4],'石川県':[6,4],'福井県':[6,5],'長野県':[7,5],'山梨県':[8,6],'岐阜県':[6,6],'静岡県':[7,6],'愛知県':[6,7],'三重県':[6,8],'滋賀県':[5,6],'京都府':[5,7],'大阪府':[5,8],'兵庫県':[4,7],'奈良県':[4,8],'和歌山県':[5,9],'鳥取県':[3,6],'島根県':[2,6],'岡山県':[3,7],'広島県':[2,7],'山口県':[1,7],'香川県':[3,9],'徳島県':[4,9],'愛媛県':[2,9],'高知県':[3,10],'福岡県':[1,8],'佐賀県':[0,8],'長崎県':[0,9],'熊本県':[1,9],'大分県':[2,8],'宮崎県':[2,10],'鹿児島県':[1,10],'沖縄県':[0,11]};
+var PARTY_MEMBERS=['かずや','ひとみ','れん','あやみ'];
+var MILESTONES=[10,50,100];
 var DEFAULT_LAT=35.45, DEFAULT_LNG=139.64;
 var map=null,mapReady=false,markerLayer=null;
-var filters={categories:{},wantAgain:false,treasure:false};
+var filters={categories:{},wantAgain:false,treasure:false,tripId:'',q:''};
 var starValue=3;
-var db={trips:[],places:[],items:[],exp:0};
+var db={trips:[],places:[],items:[],exp:0,milestone:0};
 
 function uid(){return 'id_'+Date.now()+'_'+Math.floor(Math.random()*10000);}
 function load(){
-  try{var raw=localStorage.getItem(STORAGE_KEY);if(raw){var o=JSON.parse(raw);db.trips=o.trips||[];db.places=o.places||[];db.items=o.items||[];db.exp=o.exp||0;}}
+  try{var raw=localStorage.getItem(STORAGE_KEY);if(raw){var o=JSON.parse(raw);db.trips=o.trips||[];db.places=o.places||[];db.items=o.items||[];db.exp=o.exp||0;db.milestone=o.milestone||0;}}
   catch(e){console.error(e);}
 }
 function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(db));}
@@ -56,9 +62,20 @@ function findItem(id){for(var i=0;i<db.items.length;i++)if(db.items[i].id===id)r
 function itemCatLabel(id){for(var i=0;i<ITEM_CATEGORIES.length;i++)if(ITEM_CATEGORIES[i].id===id)return ITEM_CATEGORIES[i].label;return'（未分類）';}
 function isMetalItem(it){return !!it&&it.treasure&&(it.stars||0)>=3;}
 function isMetalPlace(p){return !!p&&p.wantAgain&&(p.stars||0)>=3;}
-function metalBadgeHtml(){return '<span class="metal-badge">🩶 メタルスライム級</span>';}
+function metalBadgeHtml(){return '<span class="metal-badge"><img class="metal-ico" src="assets/metal_slime.png" alt="" onerror="this.remove()"> メタルスライム級</span>';}
 function priceHtml(v){var n=parseInt(v,10);if(isNaN(n)||n<=0)return'';return '¥'+String(n).replace(/\B(?=(\d{3})+(?!\d))/g,',');}
-function newItem(name,place,treasure){return{id:uid(),name:name,placeId:place.id,placeName:place.name,treasure:!!treasure,cat:'',price:'',forWhom:'',stars:0,note:'',createdAt:Date.now()};}
+function newItem(name,place,treasure){return{id:uid(),name:name,placeId:place.id,placeName:place.name,treasure:!!treasure,cat:'',price:'',forWhom:'',stars:0,note:'',photos:[],createdAt:Date.now()};}
+function parsePhotos(text){return String(text||'').split(/\n/).map(function(s){return s.trim();}).filter(function(s){return !!s;});}
+function photosHtml(photos,cls){if(!photos||!photos.length)return'';return '<div class="photo-gallery">'+photos.map(function(u){return '<img class="'+(cls||'photo-img')+'" src="'+esc(u)+'" loading="lazy" onerror="this.style.display=\'none\'">';}).join('')+'</div>';}
+function townsMap(){var m={};db.places.forEach(function(p){var c=(p.city||'').trim();if(c)m[c]={city:c,pref:p.pref||''};});return m;}
+function townsCount(){return Object.keys(townsMap()).length;}
+function conquestByPref(){var out={};var seen={};db.places.forEach(function(p){var c=(p.city||'').trim();if(!c||seen[c])return;seen[c]=1;var pref=p.pref||'（未設定）';if(!out[pref])out[pref]=[];out[pref].push(c);});return out;}
+function cmpPlace(a,b){var da=a.date||'',dbb=b.date||'';if(da&&dbb&&da!==dbb)return da<dbb?-1:1;if(da&&!dbb)return -1;if(!da&&dbb)return 1;return (a.createdAt||0)-(b.createdAt||0);}
+function sortedTripPlaces(tripId){return db.places.filter(function(p){return p.tripId===tripId;}).slice().sort(cmpPlace);}
+function tripPeriod(t){if(!t)return'';if(t.date&&t.endDate&&t.endDate!==t.date)return t.date+' 〜 '+t.endDate;return t.date||'';}
+function tripMetaLine(t){var parts=[];if(t.type)parts.push(t.type);var per=tripPeriod(t);if(per)parts.push(per);if(t.party&&t.party.length)parts.push('👥 '+t.party.join('・'));return parts.join(' · ');}
+function checkMilestone(){var t=townsCount();for(var i=0;i<MILESTONES.length;i++){var m=MILESTONES[i];if(t>=m&&(db.milestone||0)<m){db.milestone=m;save();showCelebration(m);return;}}}
+function showCelebration(m){var cm=document.getElementById('modal-celebration');if(!cm)return;document.getElementById('celeb-msg').innerHTML='制覇した町が <b>'+m+'町</b> に届いたよ！<br>キングスライムが お祝いに来てくれた！';cm.classList.remove('hidden');}
 function tripName(id){for(var i=0;i<db.trips.length;i++)if(db.trips[i].id===id)return db.trips[i].name;return'(なし)';}
 
 function refreshHome(){
@@ -66,7 +83,7 @@ function refreshHome(){
   document.getElementById('st-places').textContent=db.places.length;
   var treasures=db.items.filter(function(it){return it.treasure;}).length;
   document.getElementById('st-treasure').textContent=treasures;
-  var towns=db.places.length;
+  var towns=townsCount();
   document.getElementById('st-towns').textContent=towns;
   document.getElementById('st-towns2').textContent=towns;
   var pct=expInLevel(db.exp);
@@ -74,13 +91,14 @@ function refreshHome(){
   document.getElementById('st-exptext').textContent='次のレベルまで '+pct+' / 100';
   var msg=document.getElementById('slime-msg');
   if(!db.places.length)msg.innerHTML='ようこそ！ここは「旅の冒険の書」だよ。<br>まだ記録がないようだね。<br>右下の「＋」から、教会できろくしてみよう！';
-  else msg.innerHTML='記録が <b>'+db.places.length+'</b> 件あるよ！<br>制覇した場所は '+towns+'、たからものは '+treasures+' 個だね。';
+  else msg.innerHTML='記録が <b>'+db.places.length+'</b> 件、制覇した町は <b>'+towns+'</b> 町、たからものは '+treasures+' 個だよ！'+(towns<db.places.length?'<br>場所に「市区町村」を入れると町に数えるよ。':'');
   var ht=document.getElementById('home-trips');
   if(!db.trips.length)ht.innerHTML='<div class="quest-card dummy"><div>（まだ旅がありません）</div><div class="quest-meta">旅タブから作成できます</div></div>';
   else {
     ht.innerHTML=db.trips.slice(0,3).map(function(t){
       var n=db.places.filter(function(p){return p.tripId===t.id;}).length;
-      return '<div class="quest-card tap" data-trip-id="'+t.id+'"><div class="name">'+esc(t.name)+'</div><div class="quest-meta">'+(t.date||'')+' · 場所 '+n+' 件</div></div>';
+      var meta=tripMetaLine(t);
+      return '<div class="quest-card tap" data-trip-id="'+t.id+'"><div class="name">'+esc(t.name)+'</div><div class="quest-meta">'+(meta?esc(meta)+' · ':'')+'場所 '+n+' 件</div></div>';
     }).join('');
     document.querySelectorAll('#home-trips [data-trip-id]').forEach(function(el){
       el.onclick=function(){
@@ -97,7 +115,12 @@ function refreshHome(){
   var recent=db.places.slice().reverse().slice(0,5);
   if(!recent.length)hr.innerHTML='<div class="empty-message">まだ記録がありません</div>';
   else{hr.innerHTML=recent.map(function(p){return'<div class="record-card tap" data-place-id="'+p.id+'"><div class="name">'+esc(p.name)+'</div><div class="meta">'+catLabel(p.cat)+' · '+starsHtml(p.stars)+(p.wantAgain?' · また行きたい':'')+'</div></div>';}).join('');bindPlaceTaps();}
-  document.getElementById('pref-progress').innerHTML='<div class="pref-row"><span>記録した場所</span><span>'+db.places.length+'</span></div>';
+  var byPref=conquestByPref();
+  var prefNames=Object.keys(byPref);
+  if(!prefNames.length)document.getElementById('pref-progress').innerHTML='<div class="pref-row"><span>まだ制覇した町がありません</span><span></span></div>';
+  else document.getElementById('pref-progress').innerHTML=prefNames.slice(0,5).map(function(pn){var total=PREF_TOTALS[pn];return '<div class="pref-row"><span>'+esc(pn)+'</span><span>'+byPref[pn].length+(total?' / '+total:'')+'</span></div>';}).join('');
+  var ft=document.getElementById('filter-trip');
+  if(ft){var cur=ft.value;ft.innerHTML='<option value="">すべての旅</option>'+db.trips.map(function(t){return '<option value="'+t.id+'">'+esc(t.name)+'</option>';}).join('');ft.value=cur;if(ft.value!==cur)filters.tripId='';}
 }
 function formatDate(ts){
   if(!ts)return '';
@@ -117,9 +140,10 @@ function refreshQuests(){
   if(!db.trips.length){el.innerHTML='<div class="empty-message">まだ旅がありません</div>';return;}
   el.innerHTML=db.trips.map(function(t){
     var places=db.places.filter(function(p){return p.tripId===t.id;});
+    var meta=tripMetaLine(t);
     return '<div class="list-item tap trip-card" data-trip-id="'+t.id+'">'+ 
       '<div class="t">'+esc(t.name)+'</div>'+
-      '<div class="m">'+(t.date||'日付なし')+' · 場所 '+places.length+' 件</div>'+
+      '<div class="m">'+(meta?esc(meta)+' · ':'')+'場所 '+places.length+' 件</div>'+
       '<div class="trip-arrow">›</div></div>';
   }).join('');
   bindTripTaps();
@@ -135,13 +159,16 @@ function openTripDetail(tripId){
   currentTripId=tripId;
   var titleEl=document.getElementById('quest-section-title');
   if(titleEl)titleEl.textContent='旅のタイムライン';
-  var places=db.places.filter(function(p){return p.tripId===tripId;})
-    .slice().sort(function(a,b){return (a.createdAt||0)-(b.createdAt||0);});
+  var places=sortedTripPlaces(tripId);
   var el=document.getElementById('quest-list');
+  var meta=tripMetaLine(t);
   var header='<div class="timeline-header">'+
     '<button type="button" class="back-btn" id="btn-trip-back">‹ 一覧に戻る</button>'+
     '<div class="timeline-title">'+esc(t.name)+'</div>'+
-    '<div class="timeline-meta">'+(t.date||'日付なし')+' · 場所 '+places.length+' 件</div>'+
+    '<div class="timeline-meta">'+(meta?esc(meta)+' · ':'')+'場所 '+places.length+' 件</div>'+
+    (t.note?'<div class="timeline-meta" style="margin-top:4px">'+esc(t.note)+'</div>':'')+
+    (t.album?'<div style="margin-top:6px"><a class="album-link" href="'+esc(t.album)+'" target="_blank" rel="noopener">📷 Googleフォトのアルバムを開く</a></div>':'')+
+    '<div class="detail-actions" style="margin-top:10px"><button type="button" class="dq-button secondary" id="btn-trip-edit">旅を編集</button></div>'+
     (places.length?'<button type="button" class="dq-button secondary route-map-btn" id="btn-show-route">🗺️ 地図でルートを見る</button>':'')+
     '</div>';
   if(!places.length){
@@ -150,12 +177,13 @@ function openTripDetail(tripId){
     var tl='<div class="timeline">';
     places.forEach(function(p,i){
       var num=i+1;
-      var dateStr=formatDate(p.createdAt);
+      var dateStr=p.date?formatDate(Date.parse(p.date)):formatDate(p.createdAt);
       tl+='<div class="timeline-item tap" data-place-id="'+p.id+'">'+ 
         '<div class="tl-rail"><div class="tl-num">'+num+'</div>'+(i<places.length-1?'<div class="tl-line"></div>':'')+'</div>'+
         '<div class="tl-card">'+
+          ((p.photos&&p.photos.length)?'<img class="tl-thumb" src="'+esc(p.photos[0])+'" loading="lazy" onerror="this.style.display=\'none\'">':'')+
           '<div class="tl-name">'+esc(p.name)+'</div>'+
-          '<div class="tl-meta">'+catLabel(p.cat)+' · '+starsHtml(p.stars)+(p.wantAgain?' · また行きたい':'')+(dateStr?' · '+dateStr:'')+'</div>'+
+          '<div class="tl-meta">'+catLabel(p.cat)+' · '+starsHtml(p.stars)+(p.wantAgain?' · また行きたい':'')+(p.city?' · '+esc(p.city):'')+(dateStr?' · '+dateStr:'')+'</div>'+
           (p.note?'<div class="tl-note">'+esc(p.note)+'</div>':'')+
         '</div></div>';
     });
@@ -165,6 +193,8 @@ function openTripDetail(tripId){
   }
   var back=document.getElementById('btn-trip-back');
   if(back)back.onclick=function(){refreshQuests();};
+  var te=document.getElementById('btn-trip-edit');
+  if(te)te.onclick=function(){openTripForm(tripId);};
   var rb=document.getElementById('btn-show-route');
   if(rb)rb.onclick=function(){showTripRoute(tripId);};
 }
@@ -220,6 +250,7 @@ function openItemDetail(id){
     (priceHtml(it.price)?'<div class="detail-block"><div class="detail-label">金額（参考）</div><div class="detail-value">'+priceHtml(it.price)+'</div></div>':'')+
     (it.forWhom?'<div class="detail-block"><div class="detail-label">誰用か</div><div class="detail-value">'+esc(it.forWhom)+'</div></div>':'')+
     (it.note?'<div class="detail-block"><div class="detail-label">メモ</div><div class="detail-value">'+esc(it.note)+'</div></div>':'')+
+    ((it.photos&&it.photos.length)?'<div class="detail-block"><div class="detail-label">写真</div>'+photosHtml(it.photos)+'</div>':'')+
     (!it.cat&&!it.stars&&!it.price&&!it.forWhom&&!it.note?'<div class="detail-block"><div class="detail-value" style="font-size:.85rem;color:var(--sub)">カテゴリや評価は「編集」から足せます'+(meta?'':'')+'</div></div>':'')+
     '<div class="detail-actions"><button class="dq-button secondary" type="button" id="btn-item-edit">編集</button><button class="dq-button danger" type="button" id="btn-item-delete">削除</button></div>';
   modalD.classList.remove('hidden');
@@ -247,6 +278,7 @@ function openEditItem(id){
   fw.value=it.forWhom||'';
   document.getElementById('i-treasure').checked=!!it.treasure;
   document.getElementById('i-note').value=it.note||'';
+  document.getElementById('i-photos').value=(it.photos||[]).join('\n');
   document.querySelectorAll('#i-stars .star-btn').forEach(function(x){x.classList.toggle('on',+x.dataset.s===itemStarValue);});
   modalD.classList.add('hidden');
   modalI.classList.remove('hidden');
@@ -271,6 +303,7 @@ function initItemModal(){
     it.stars=itemStarValue;
     it.treasure=document.getElementById('i-treasure').checked;
     it.note=document.getElementById('i-note').value.trim();
+    it.photos=parsePhotos(document.getElementById('i-photos').value);
     save();refreshAll();modalI.classList.add('hidden');editingItemId=null;
     toast(isMetalItem(it)?'メタルスライム級に記録しました！':'変更を保存しました');
   };
@@ -304,7 +337,31 @@ document.getElementById('btn-close-record').onclick=function(){modalR.classList.
 document.getElementById('btn-close-trip').onclick=function(){modalT.classList.add('hidden');};
 modalR.onclick=function(e){if(e.target===modalR)modalR.classList.add('hidden');};
 modalT.onclick=function(e){if(e.target===modalT)modalT.classList.add('hidden');};
-document.getElementById('btn-new-trip').onclick=function(){document.getElementById('t-name').value='';document.getElementById('t-date').value='';modalT.classList.remove('hidden');};
+var editingTripId=null;
+function fillPartyChecks(selected){
+  var box=document.getElementById('t-party');
+  box.innerHTML=PARTY_MEMBERS.map(function(m){return '<label class="check-row party-check"><input type="checkbox" value="'+m+'"'+(selected&&selected.indexOf(m)>=0?' checked':'')+'> '+m+'</label>';}).join('');
+}
+function openTripForm(tripId){
+  editingTripId=tripId||null;
+  var t=tripId?findTrip(tripId):null;
+  document.getElementById('trip-modal-title').textContent=t?'🍺 旅を編集':'🍺 新しい旅';
+  document.getElementById('btn-save-trip').textContent=t?'変更を保存する':'旅を作る';
+  document.getElementById('btn-delete-trip').classList.toggle('hidden',!t);
+  document.getElementById('t-name').value=t?t.name:'';
+  document.getElementById('t-type').value=t?(t.type||'家族旅行'):'家族旅行';
+  document.getElementById('t-date').value=t?(t.date||''):'';
+  document.getElementById('t-end').value=t?(t.endDate||''):'';
+  document.getElementById('t-album').value=t?(t.album||''):'';
+  document.getElementById('t-note').value=t?(t.note||''):'';
+  fillPartyChecks(t?t.party:null);
+  modalT.classList.remove('hidden');
+}
+document.getElementById('btn-new-trip').onclick=function(){openTripForm(null);};
+function fillPrefSelect(sel,value){
+  sel.innerHTML='<option value="">（未選択）</option>'+PREFS.map(function(p){return '<option value="'+p.name+'">'+p.name+'</option>';}).join('');
+  sel.value=value||'';
+}
 function openRecordForm(){
   ensureDefaultTrip();
   var sel=document.getElementById('f-trip');
@@ -314,6 +371,12 @@ function openRecordForm(){
   document.getElementById('f-name').value='';
   document.getElementById('f-lat').value='';
   document.getElementById('f-lng').value='';
+  document.getElementById('f-date').value='';
+  fillPrefSelect(document.getElementById('f-pref'),'');
+  document.getElementById('f-city').value='';
+  document.getElementById('f-address').value='';
+  document.getElementById('f-url').value='';
+  document.getElementById('f-photos').value='';
   document.getElementById('f-note').value='';
   document.getElementById('f-item').value='';
   document.getElementById('f-want').checked=false;
@@ -328,8 +391,32 @@ document.querySelectorAll('#f-stars .star-btn').forEach(function(b){
 document.getElementById('btn-save-trip').onclick=function(){
   var name=document.getElementById('t-name').value.trim();
   if(!name){toast('旅の名前を入れてね');return;}
-  db.trips.push({id:uid(),name:name,date:document.getElementById('t-date').value||''});
+  var party=[];
+  document.querySelectorAll('#t-party input[type="checkbox"]').forEach(function(c){if(c.checked)party.push(c.value);});
+  var data={name:name,type:document.getElementById('t-type').value,date:document.getElementById('t-date').value||'',endDate:document.getElementById('t-end').value||'',party:party,album:document.getElementById('t-album').value.trim(),note:document.getElementById('t-note').value.trim()};
+  if(data.endDate&&data.date&&data.endDate<data.date){toast('終了日が開始日より前になっています');return;}
+  if(editingTripId){
+    var t=findTrip(editingTripId);
+    if(t){for(var k in data)t[k]=data[k];}
+    save();refreshAll();modalT.classList.add('hidden');editingTripId=null;toast('旅を変更しました');return;
+  }
+  data.id=uid();
+  db.trips.push(data);
   save();refreshAll();modalT.classList.add('hidden');toast('旅を作ったよ！');
+};
+document.getElementById('btn-delete-trip').onclick=function(){
+  if(!editingTripId)return;
+  var t=findTrip(editingTripId);if(!t)return;
+  var places=db.places.filter(function(p){return p.tripId===t.id;});
+  var pids=places.map(function(p){return p.id;});
+  var items=db.items.filter(function(it){return pids.indexOf(it.placeId)>=0;});
+  if(!confirm('旅「'+t.name+'」を削除しますか？\n場所 '+places.length+' 件とお土産 '+items.length+' 件も一緒に消えます。'))return;
+  db.items=db.items.filter(function(it){return pids.indexOf(it.placeId)<0;});
+  db.places=db.places.filter(function(p){return p.tripId!==t.id;});
+  db.trips=db.trips.filter(function(x){return x.id!==t.id;});
+  if(routeTripId===t.id)routeTripId=null;
+  currentTripId=null;
+  save();refreshAll();modalT.classList.add('hidden');editingTripId=null;toast('旅を削除しました');
 };
 
 var modalD=document.getElementById('modal-detail'),editingPlaceId=null;
@@ -349,6 +436,11 @@ function openPlaceDetail(id){
     (p.wantAgain?'<div class="detail-block"><div class="detail-value">✨ また行きたい</div></div>':'')+
     (p.note?'<div class="detail-block"><div class="detail-label">メモ</div><div class="detail-value">'+esc(p.note)+'</div></div>':'')+
     '<div class="detail-block"><div class="detail-label">旅</div><div class="detail-value">'+esc(tripName(p.tripId))+'</div></div>'+
+    (p.date?'<div class="detail-block"><div class="detail-label">行った日</div><div class="detail-value">'+esc(p.date)+'</div></div>':'')+
+    ((p.pref||p.city)?'<div class="detail-block"><div class="detail-label">市区町村</div><div class="detail-value">'+esc((p.pref||'')+' '+(p.city||''))+'</div></div>':'')+
+    (p.address?'<div class="detail-block"><div class="detail-label">住所</div><div class="detail-value">'+esc(p.address)+'</div></div>':'')+
+    (p.url?'<div class="detail-block"><div class="detail-label">紹介URL</div><div class="detail-value" style="font-size:.85rem"><a class="album-link" href="'+esc(p.url)+'" target="_blank" rel="noopener">'+esc(p.url)+'</a></div></div>':'')+
+    ((p.photos&&p.photos.length)?'<div class="detail-block"><div class="detail-label">写真</div>'+photosHtml(p.photos)+'</div>':'')+
     '<div class="detail-block"><div class="detail-label">座標</div><div class="detail-value" style="font-size:.85rem">'+p.lat.toFixed(5)+', '+p.lng.toFixed(5)+'</div></div>'+
     (ih?'<div class="detail-block"><div class="detail-label">お土産</div>'+ih+'</div>':'')+
     '<div class="detail-actions"><button class="dq-button secondary" type="button" id="btn-detail-edit">編集</button><button class="dq-button danger" type="button" id="btn-detail-delete">削除</button></div>';
@@ -374,6 +466,12 @@ function openEditPlace(id){
   document.getElementById('f-name').value=p.name;
   document.getElementById('f-lat').value=p.lat;
   document.getElementById('f-lng').value=p.lng;
+  document.getElementById('f-date').value=p.date||'';
+  fillPrefSelect(document.getElementById('f-pref'),p.pref||'');
+  document.getElementById('f-city').value=p.city||'';
+  document.getElementById('f-address').value=p.address||'';
+  document.getElementById('f-url').value=p.url||'';
+  document.getElementById('f-photos').value=(p.photos||[]).join('\n');
   document.getElementById('f-note').value=p.note||'';
   document.getElementById('f-item').value='';
   document.getElementById('f-want').checked=!!p.wantAgain;
@@ -399,19 +497,21 @@ document.getElementById('btn-save-record').onclick=function(){
   if(isNaN(lat)||isNaN(lng)){lat=DEFAULT_LAT+(Math.random()-0.5)*0.04;lng=DEFAULT_LNG+(Math.random()-0.5)*0.04;}
   if(editingPlaceId){
     var p=findPlace(editingPlaceId);
-    if(p){p.tripId=tripId;p.name=name;p.cat=document.getElementById('f-cat').value;p.lat=lat;p.lng=lng;p.stars=starValue;p.wantAgain=document.getElementById('f-want').checked;p.note=document.getElementById('f-note').value.trim();}
+    if(p){p.tripId=tripId;p.name=name;p.cat=document.getElementById('f-cat').value;p.lat=lat;p.lng=lng;p.stars=starValue;p.wantAgain=document.getElementById('f-want').checked;p.note=document.getElementById('f-note').value.trim();p.date=document.getElementById('f-date').value||'';p.pref=document.getElementById('f-pref').value;p.city=document.getElementById('f-city').value.trim();p.address=document.getElementById('f-address').value.trim();p.url=document.getElementById('f-url').value.trim();p.photos=parsePhotos(document.getElementById('f-photos').value);}
     var iname=document.getElementById('f-item').value.trim();
     if(iname){db.items.push(newItem(iname,{id:editingPlaceId,name:name},document.getElementById('f-treasure').checked));db.exp+=document.getElementById('f-treasure').checked?20:8;}
     save();refreshAll();modalR.classList.add('hidden');editingPlaceId=null;
     document.querySelector('#modal-record .modal-header span').textContent='⛪ 教会で きろくする';
     document.getElementById('btn-save-record').textContent='冒険の書に記録する';
-    toast('変更を保存しました');return;
+    toast('変更を保存しました');checkMilestone();return;
   }
-  var place={id:uid(),tripId:tripId,name:name,cat:document.getElementById('f-cat').value,lat:lat,lng:lng,stars:starValue,wantAgain:document.getElementById('f-want').checked,note:document.getElementById('f-note').value.trim(),createdAt:Date.now()};
-  db.places.push(place);db.exp+=15+(place.wantAgain?5:0);
+  var cityVal=document.getElementById('f-city').value.trim();
+  var isNewTown=!!cityVal&&!db.places.some(function(x){return (x.city||'').trim()===cityVal;});
+  var place={id:uid(),tripId:tripId,name:name,cat:document.getElementById('f-cat').value,lat:lat,lng:lng,stars:starValue,wantAgain:document.getElementById('f-want').checked,note:document.getElementById('f-note').value.trim(),date:document.getElementById('f-date').value||'',pref:document.getElementById('f-pref').value,city:cityVal,address:document.getElementById('f-address').value.trim(),url:document.getElementById('f-url').value.trim(),photos:parsePhotos(document.getElementById('f-photos').value),createdAt:Date.now()};
+  db.places.push(place);db.exp+=15+(place.wantAgain?5:0)+(isNewTown?30:0);
   var iname2=document.getElementById('f-item').value.trim();
   if(iname2){db.items.push(newItem(iname2,place,document.getElementById('f-treasure').checked));db.exp+=document.getElementById('f-treasure').checked?20:8;}
-  save();refreshAll();modalR.classList.add('hidden');toast('冒険の書に記録しました！');
+  save();refreshAll();modalR.classList.add('hidden');toast(isNewTown?'新しい町を制覇！（+30 EXP）':'冒険の書に記録しました！');checkMilestone();
 };
 
 /* map */
@@ -424,8 +524,8 @@ function ensureLeaflet(){if(typeof L!=='undefined')return Promise.resolve('cache
 function setMapStatus(msg,hide){var el=document.getElementById('map-status');if(hide){el.classList.add('hidden');return;}el.textContent=msg;el.classList.remove('hidden');}
 function icon(spot){var bg=spot.wantAgain?'#e8c547':catColor(spot.cat);var g=spot.wantAgain?' gold':'';return L.divIcon({className:'',html:'<div class="pin-dot'+g+'" style="background:'+bg+'"></div>',iconSize:[18,18],iconAnchor:[9,9],popupAnchor:[0,-10]});}
 function numIcon(n){return L.divIcon({className:'',html:'<div class="route-num">'+n+'</div>',iconSize:[26,26],iconAnchor:[13,13],popupAnchor:[0,-14]});}
-function popup(spot){return'<div class="pin-popup-name">'+esc(spot.name)+'</div><div class="pin-popup-meta">'+catLabel(spot.cat)+(spot.wantAgain?' · また行きたい':'')+'</div><div class="pin-popup-stars">'+starsHtml(spot.stars)+'</div>'+(spot.note?'<div class="pin-popup-meta">'+esc(spot.note)+'</div>':'')+(isMetalPlace(spot)?'<div style="margin-top:4px">'+metalBadgeHtml()+'</div>':'')+'<button type="button" class="pin-detail-btn" data-place-detail="'+spot.id+'">詳細を見る</button>';}
-function match(spot){var any=false,ok=false;for(var k in filters.categories){if(filters.categories[k]){any=true;if(spot.cat===k)ok=true;}}if(any&&!ok)return false;if(filters.wantAgain&&!spot.wantAgain)return false;if(filters.treasure){var has=db.items.some(function(it){return it.placeId===spot.id&&it.treasure;});if(!has)return false;}return true;}
+function popup(spot){return((spot.photos&&spot.photos.length)?'<img class="pin-popup-img" src="'+esc(spot.photos[0])+'" onerror="this.style.display=\'none\'">':'')+'<div class="pin-popup-name">'+esc(spot.name)+'</div><div class="pin-popup-meta">'+catLabel(spot.cat)+(spot.wantAgain?' · また行きたい':'')+'</div><div class="pin-popup-stars">'+starsHtml(spot.stars)+'</div>'+(spot.note?'<div class="pin-popup-meta">'+esc(spot.note)+'</div>':'')+(isMetalPlace(spot)?'<div style="margin-top:4px">'+metalBadgeHtml()+'</div>':'')+'<button type="button" class="pin-detail-btn" data-place-detail="'+spot.id+'">詳細を見る</button>';}
+function match(spot){var any=false,ok=false;for(var k in filters.categories){if(filters.categories[k]){any=true;if(spot.cat===k)ok=true;}}if(any&&!ok)return false;if(filters.wantAgain&&!spot.wantAgain)return false;if(filters.tripId&&spot.tripId!==filters.tripId)return false;if(filters.q&&(spot.name||'').indexOf(filters.q)<0)return false;if(filters.treasure){var has=db.items.some(function(it){return it.placeId===spot.id&&it.treasure;});if(!has)return false;}return true;}
 function updateRouteBanner(){
   var el=document.getElementById('route-banner');
   if(!el)return;
@@ -470,8 +570,7 @@ function renderMarkers(){
   markerLayer.clearLayers();
   if(routeLine){try{map.removeLayer(routeLine);}catch(e){}routeLine=null;}
   if(routeTripId){
-    var places=db.places.filter(function(p){return p.tripId===routeTripId;})
-      .slice().sort(function(a,b){return (a.createdAt||0)-(b.createdAt||0);});
+    var places=sortedTripPlaces(routeTripId);
     var latlngs=[];
     places.forEach(function(spot,i){
       latlngs.push([spot.lat,spot.lng]);
@@ -510,8 +609,79 @@ document.querySelectorAll('[data-close]').forEach(function(b){b.onclick=closePan
 var catEl=document.getElementById('filter-categories');
 CATEGORIES.forEach(function(c){var b=document.createElement('button');b.type='button';b.className='chip';b.textContent=c.label;b.onclick=function(){b.classList.toggle('active');filters.categories[c.id]=b.classList.contains('active');};catEl.appendChild(b);});
 document.querySelectorAll('[data-filter]').forEach(function(b){b.onclick=function(){b.classList.toggle('active');filters[b.dataset.filter]=b.classList.contains('active');};});
-document.getElementById('btn-filter-apply').onclick=function(){renderMarkers();closePanels();};
-document.getElementById('btn-filter-reset').onclick=function(){filters={categories:{},wantAgain:false,treasure:false};document.querySelectorAll('#panel-sakusen .chip').forEach(function(c){c.classList.remove('active');});renderMarkers();};
+document.getElementById('btn-filter-apply').onclick=function(){filters.tripId=document.getElementById('filter-trip').value||'';filters.q=document.getElementById('filter-q').value.trim();renderMarkers();closePanels();};
+document.getElementById('btn-filter-reset').onclick=function(){filters={categories:{},wantAgain:false,treasure:false,tripId:'',q:''};document.querySelectorAll('#panel-sakusen .chip').forEach(function(c){c.classList.remove('active');});document.getElementById('filter-trip').value='';document.getElementById('filter-q').value='';renderMarkers();};
 
-load();initItemModal();bindZukanFilters();refreshAll();
+function renderConquest(){
+  var towns=townsCount();
+  document.getElementById('cq-towns').textContent=towns;
+  var byPref=conquestByPref();
+  var names=Object.keys(byPref);
+  document.getElementById('cq-summary').innerHTML=names.length?names.map(function(pn){var total=PREF_TOTALS[pn];return '<div class="pref-row"><span>'+esc(pn)+'</span><span>'+byPref[pn].length+(total?' / '+total:'')+'</span></div>';}).join(''):'<div class="pref-row"><span>まだ制覇した町がありません</span><span></span></div>';
+  var tm=document.getElementById('tile-map');
+  tm.innerHTML=PREFS.map(function(p){
+    var pos=TILE_POS[p.name]||[0,0];
+    var cnt=byPref[p.name]?byPref[p.name].length:0;
+    var total=PREF_TOTALS[p.name]||0;
+    var lv=!cnt?0:(total&&cnt/total>=0.5?3:(cnt>=3?2:1));
+    return '<button type="button" class="tile lv'+lv+'" data-pref="'+p.name+'" style="grid-column:'+(pos[0]+1)+';grid-row:'+(pos[1]+1)+'" title="'+p.name+'">'+p.name.replace(/県|府/,'').slice(0,3)+'<span class="tile-num">'+(cnt?cnt:'')+'</span></button>';
+  }).join('');
+  document.getElementById('cq-detail').innerHTML='';
+  tm.querySelectorAll('[data-pref]').forEach(function(b){
+    b.onclick=function(){
+      var pn=b.getAttribute('data-pref');
+      var list=byPref[pn]||[];
+      document.getElementById('cq-detail').innerHTML='<div class="detail-block" style="margin-top:12px"><div class="detail-label">'+esc(pn)+'（'+list.length+'町）</div><div class="detail-value">'+(list.length?list.map(function(c){return esc(c);}).join('、'):'まだ制覇した町はありません')+'</div></div>';
+    };
+  });
+}
+function initConquest(){
+  var cm=document.getElementById('modal-conquest');
+  document.getElementById('btn-conquest-open').onclick=function(){renderConquest();cm.classList.remove('hidden');};
+  document.getElementById('btn-close-conquest').onclick=function(){cm.classList.add('hidden');};
+  cm.onclick=function(e){if(e.target===cm)cm.classList.add('hidden');};
+  var cel=document.getElementById('modal-celebration');
+  document.getElementById('btn-celeb-close').onclick=function(){cel.classList.add('hidden');};
+  cel.onclick=function(e){if(e.target===cel)cel.classList.add('hidden');};
+}
+function initDataTools(){
+  document.getElementById('btn-export').onclick=function(){
+    try{
+      var blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});
+      var a=document.createElement('a');
+      a.href=URL.createObjectURL(blob);
+      a.download='tabi-bouken-backup.json';
+      document.body.appendChild(a);a.click();
+      setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},400);
+      toast('書き出しました');
+    }catch(e){toast('書き出しに失敗しました');}
+  };
+  var fi=document.getElementById('file-import');
+  document.getElementById('btn-import').onclick=function(){fi.value='';fi.click();};
+  fi.onchange=function(){
+    var f=fi.files&&fi.files[0];if(!f)return;
+    var r=new FileReader();
+    r.onload=function(){
+      try{
+        var o=JSON.parse(r.result);
+        if(!o||!Array.isArray(o.trips)||!Array.isArray(o.places)||!Array.isArray(o.items))throw new Error('bad');
+        if(!confirm('今のデータを、読み込んだデータで上書きしますか？'))return;
+        db.trips=o.trips;db.places=o.places;db.items=o.items;db.exp=o.exp||0;db.milestone=o.milestone||0;
+        routeTripId=null;currentTripId=null;
+        save();refreshAll();toast('読み込みました');checkMilestone();
+      }catch(e){toast('読み込めませんでした（ファイル形式が違います）');}
+    };
+    r.readAsText(f);
+  };
+  document.getElementById('btn-wipe').onclick=function(){
+    if(!confirm('全データを消しますか？\n旅・場所・お土産がすべて消えます。'))return;
+    if(!confirm('本当に消しますか？（元に戻せません。先に書き出しをおすすめします）'))return;
+    db={trips:[],places:[],items:[],exp:0,milestone:0};
+    routeTripId=null;currentTripId=null;
+    try{localStorage.removeItem(STORAGE_KEY);}catch(e){}
+    save();refreshAll();toast('全データを消しました');
+  };
+}
+
+load();initItemModal();bindZukanFilters();initConquest();initDataTools();refreshAll();
 })();
