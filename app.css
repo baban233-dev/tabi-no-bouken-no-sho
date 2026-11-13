@@ -89,3 +89,12 @@ html,body{height:100%;height:100dvh;overflow:hidden;font-family:"Hiragino Sans",
 .toast.show{opacity:1}
 .list-item{background:var(--win);border-radius:4px;padding:10px 12px;margin-bottom:8px}
 .list-item .t{font-weight:600}.list-item .m{font-size:.78rem;color:var(--sub);margin-top:2px}
+.detail-block{margin-bottom:14px}
+.detail-label{font-size:.75rem;color:var(--sub);margin-bottom:2px}
+.detail-value{font-size:1rem;line-height:1.45}
+.detail-stars{color:#e8c547;font-size:1.1rem;letter-spacing:.05em}
+.detail-actions{display:flex;gap:8px;margin-top:16px}
+.detail-actions .dq-button{flex:1;padding:10px;font-size:.85rem}
+.tap{cursor:pointer}
+.tap:active{opacity:.75}
+.mini-map-hint{font-size:.78rem;color:var(--sub);margin-top:6px}
