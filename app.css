@@ -321,3 +321,21 @@ body{background:#79c7f2 url('assets/anime_bg.jpg') center top/cover fixed no-rep
 /* ===== THEME 6.1: タイトル帯の比率を板に合わせ、文字の絵を白い帯の位置へ ===== */
 .sign-title{aspect-ratio:542/119;padding:0 10px}
 .title-img{transform:translateY(52%)}
+
+/* ===== THEME 7: ホーム画面は1枚の絵＋重ね表示 ===== */
+body[data-tab="home"] .app-header{display:none}
+.home-art{position:relative;margin:-14px -12px 12px;aspect-ratio:1008/2128;background:#79a6d8;container-type:inline-size;overflow:hidden}
+.home-art-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.art-num{position:absolute;right:35%;transform:translateY(-50%);font-family:"Klee One",cursive;font-size:6.6cqw;font-weight:700;line-height:1;color:#40301d;text-shadow:0 1px 0 rgba(255,246,220,.55)}
+.art-expbar{position:absolute;left:12.5%;top:56.3%;width:45%;height:1.05%;background:rgba(84,58,30,.38);border-radius:99px;overflow:hidden}
+#st-expbar{height:100%;width:0;background:linear-gradient(180deg,#93cf7c,#5da24b)}
+.art-exptext{position:absolute;left:12.5%;top:58.1%;display:flex;align-items:center;gap:1.6cqw;font-family:"Klee One",cursive;font-size:3.5cqw;font-weight:700;color:#40301d;text-shadow:0 1px 0 rgba(255,246,220,.5)}
+.art-next-img{height:3.1cqw;width:auto}
+.art-list{position:absolute;left:19.5%;width:61.5%;height:5.2%;overflow:hidden}
+#home-trips{top:67.2%;height:6.8%}
+#home-recent{top:83.6%;height:6.4%}
+.art-row{display:block;background:none!important;border:none!important;box-shadow:none!important;border-radius:0!important;padding:0!important;margin:0!important;font-family:"Klee One",cursive;font-size:3.2cqw;line-height:1.38;font-weight:600;color:#43301c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+.art-row .m{font-size:2.85cqw;font-weight:500;opacity:.72;margin-left:1.8cqw}
+.art-empty{opacity:.75;cursor:default}
+.sect-img{height:24px;width:auto}
+.section-title{display:flex;align-items:center;gap:6px}

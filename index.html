@@ -9,32 +9,28 @@
 <link href="https://fonts.googleapis.com/css2?family=Hachi+Maru+Pop&family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="app.css">
 </head>
-<body>
+<body data-tab="home">
 <div id="app">
 <header class="app-header"><img class="title-slime" src="assets/slime.png" alt="" onerror="this.style.display='none'"><h1 class="app-title"><img class="title-img" src="assets/text_title.png" alt="旅の冒険の書"></h1></header>
 <main id="main-content">
 <section id="tab-home" class="tab-panel active">
-<div class="hero-scene"><img class="hero-bg" src="assets/anime_bg.jpg" alt="" onerror="this.style.display='none'"><img class="hero-chara" src="assets/hero_slime.png" alt="" onerror="this.style.display='none'"><img class="hero-panther" src="assets/panther.png" alt="" onerror="this.style.display='none'"></div>
-<div class="sign-board"><img class="sign-img" src="assets/wood_sign.png" alt="" onerror="this.style.display='none'">
-<div class="sign-paper">
-<div class="status-row"><span class="status-label"><img class="label-img" src="assets/text_lv.png" alt="Lv"></span><span class="status-value" id="st-lv">1</span></div>
-<div class="status-row"><span class="status-label"><img class="label-img" src="assets/text_towns.png" alt="制覇した町"></span><span class="status-value" id="st-towns">0</span></div>
-<div class="status-row"><span class="status-label"><img class="label-img" src="assets/text_places.png" alt="場所"></span><span class="status-value" id="st-places">0</span></div>
-<div class="status-row"><span class="status-label"><img class="label-img" src="assets/text_treasure.png" alt="たからもの"></span><span class="status-value" id="st-treasure">0</span></div>
-<div class="exp-bar-wrap"><div class="exp-bar" id="st-expbar"></div></div>
-<div class="exp-text"><img class="label-img sm" src="assets/text_next.png" alt="次のレベルまで"> <span id="st-exptext">0 / 100</span></div>
-</div>
-</div>
+<div class="home-art"><img class="home-art-img" src="assets/home_full.jpg" alt="" onerror="this.style.display='none'">
+<div class="art-num" id="st-lv" style="top:36.2%">1</div>
+<div class="art-num" id="st-towns" style="top:41.0%">0</div>
+<div class="art-num" id="st-places" style="top:46.0%">0</div>
+<div class="art-num" id="st-treasure" style="top:50.7%">0</div>
+<div class="art-expbar"><div id="st-expbar"></div></div>
+<div class="art-exptext"><img class="art-next-img" src="assets/text_next.png" alt="次のレベルまで"><span id="st-exptext">0 / 100</span></div>
 <div class="slime-guide"><div class="slime-icon"><img class="slime-img" src="assets/slime.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><span class="slime-emoji" style="display:none">🩵</span></div><div id="slime-msg">ようこそ！</div></div>
-<div class="section-box"><div class="section-title">🎒 冒険中の旅</div><div id="home-trips"></div></div>
-<div class="section-box"><div class="section-title">📝 最近の記録</div><div id="home-recent"></div></div>
-<div class="section-box"><div class="section-title">🗺️ 制覇コーナー</div>
+<div class="art-list" id="home-trips"></div>
+<div class="art-list" id="home-recent"></div></div>
+<div class="section-box"><div class="section-title"><img class="sect-img" src="assets/text_conquest.png" alt="制覇コーナー"></div>
 <div class="conquest-summary"><div><span class="big-num" id="st-towns2">0</span><span class="unit">町</span></div>
 <div class="conquest-pref" id="pref-progress"></div></div>
 <button class="dq-button secondary" id="btn-conquest-open" type="button">制覇マップを見る</button>
 <div class="mini-map-hint">町の数は、場所の「市区町村」から数えています。未入力の場所は数に入りません。</div>
 </div>
-<div class="section-box"><div class="section-title">📕 冒険の書の管理</div>
+<div class="section-box"><div class="section-title"><img class="sect-img" src="assets/text_manage.png" alt="冒険の書の管理"></div>
 <button class="dq-button secondary" id="btn-export" type="button">データを書き出す（バックアップ）</button>
 <button class="dq-button secondary" id="btn-import" type="button" style="margin-top:8px">データを読み込む</button>
 <input type="file" id="file-import" accept=".json,application/json" style="display:none">

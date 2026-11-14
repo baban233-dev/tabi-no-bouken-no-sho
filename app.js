@@ -93,12 +93,12 @@ function refreshHome(){
   if(!db.places.length)msg.innerHTML='ようこそ！ここは「旅の冒険の書」だよ。<br>まだ記録がないようだね。<br>右下の「＋」から、教会できろくしてみよう！';
   else msg.innerHTML='記録が <b>'+db.places.length+'</b> 件、制覇した町は <b>'+towns+'</b> 町、たからものは '+treasures+' 個だよ！'+(towns<db.places.length?'<br>場所に「市区町村」を入れると町に数えるよ。':'');
   var ht=document.getElementById('home-trips');
-  if(!db.trips.length)ht.innerHTML='<div class="quest-card dummy"><div>（まだ旅がありません）</div><div class="quest-meta">旅タブから作成できます</div></div>';
+  if(!db.trips.length)ht.innerHTML='<div class="art-row art-empty">（まだ旅がありません）</div>';
   else {
     ht.innerHTML=db.trips.slice(0,3).map(function(t){
       var n=db.places.filter(function(p){return p.tripId===t.id;}).length;
       var meta=tripMetaLine(t);
-      return '<div class="quest-card tap" data-trip-id="'+t.id+'"><div class="name">'+esc(t.name)+'</div><div class="quest-meta">'+(meta?esc(meta)+' · ':'')+'場所 '+n+' 件</div></div>';
+      return '<div class="art-row tap" data-trip-id="'+t.id+'"><span class="n">'+esc(t.name)+'</span><span class="m">'+(meta?esc(meta)+' · ':'')+'場所 '+n+' 件</span></div>';
     }).join('');
     document.querySelectorAll('#home-trips [data-trip-id]').forEach(function(el){
       el.onclick=function(){
@@ -112,9 +112,9 @@ function refreshHome(){
     });
   }
   var hr=document.getElementById('home-recent');
-  var recent=db.places.slice().reverse().slice(0,5);
-  if(!recent.length)hr.innerHTML='<div class="empty-message">まだ記録がありません</div>';
-  else{hr.innerHTML=recent.map(function(p){return'<div class="record-card tap" data-place-id="'+p.id+'"><div class="name">'+esc(p.name)+'</div><div class="meta">'+catLabel(p.cat)+' · '+starsHtml(p.stars)+(p.wantAgain?' · また行きたい':'')+'</div></div>';}).join('');bindPlaceTaps();}
+  var recent=db.places.slice().reverse().slice(0,3);
+  if(!recent.length)hr.innerHTML='<div class="art-row art-empty">（まだ記録がありません）</div>';
+  else{hr.innerHTML=recent.map(function(p){return'<div class="art-row record-card tap" data-place-id="'+p.id+'"><span class="n">'+esc(p.name)+'</span><span class="m">'+catLabel(p.cat)+(p.stars?' · '+'★'.repeat(p.stars):'')+(p.wantAgain?' · また行きたい':'')+'</span></div>';}).join('');bindPlaceTaps();}
   var byPref=conquestByPref();
   var prefNames=Object.keys(byPref);
   if(!prefNames.length)document.getElementById('pref-progress').innerHTML='<div class="pref-row"><span>まだ制覇した町がありません</span><span></span></div>';
@@ -323,6 +323,7 @@ document.querySelectorAll('.tab-btn').forEach(function(btn){
     document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
     document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active');});
     btn.classList.add('active');
+    document.body.dataset.tab=btn.dataset.tab;
     var id='tab-'+btn.dataset.tab;
     document.getElementById(id).classList.add('active');
     if(btn.dataset.tab==='map')ensureMap();
