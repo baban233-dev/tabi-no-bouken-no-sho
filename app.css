@@ -303,3 +303,12 @@ body{background:#79b657 url('assets/bg_meadow.jpg') center top/cover fixed no-re
 .section-box .big-num{color:#fff}
 .section-box .unit{color:#f7ead0}
 .section-box .conquest-pref{color:#f7ead0}
+
+/* ===== ANIME THEME 5: 全体をひとつの景色に ===== */
+body{background:#79c7f2 url('assets/anime_bg.jpg') center top/cover fixed no-repeat}
+.hero-scene{height:186px;border:none;border-radius:0;box-shadow:none;background:none;overflow:visible;margin-bottom:2px}
+.hero-bg{display:none}
+.hero-chara{left:1%;bottom:0;height:104%}
+.hero-panther{right:1%;bottom:0;width:36%}
+.sign-board{margin-top:0}
+.section-box{background:#6b4a26 url('assets/wood_board.png') center/100% 100% no-repeat}
