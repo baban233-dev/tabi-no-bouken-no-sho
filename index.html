@@ -7,14 +7,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Hachi+Maru+Pop&family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="app.css?v=3">
 </head>
 <body data-tab="home">
 <div id="app">
 <header class="app-header"><img class="title-slime" src="assets/slime.png" alt="" onerror="this.style.display='none'"><h1 class="app-title"><img class="title-img" src="assets/text_title.png" alt="旅の冒険の書"></h1></header>
 <main id="main-content">
 <section id="tab-home" class="tab-panel active">
-<div class="home-screen"><img class="home-screen-img" src="assets/home_all.jpg" alt="" onerror="this.style.display='none'">
+<div class="home-screen"><img class="home-screen-img" src="assets/home_all.jpg?v=3" alt="" onerror="this.style.display='none'">
 <div class="hs-num" id="st-lv" style="top:25.8%">1</div>
 <div class="hs-num" id="st-towns" style="top:28.3%">0</div>
 <div class="hs-num" id="st-places" style="top:30.7%">0</div>
@@ -31,7 +31,7 @@
 <input type="file" id="file-import" accept=".json,application/json" style="display:none">
 <button class="art-btn" id="btn-wipe" type="button" aria-label="全データを消す" style="left:26.5%;top:91.55%;width:47%;height:2.85%"></button>
 </div>
-<div class="slime-guide"><div class="slime-icon"><img class="slime-img" src="assets/homita.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><span class="slime-emoji" style="display:none">🩵</span></div><div id="slime-msg">ようこそ！</div></div>
+<div class="slime-guide"><div class="slime-icon"><img class="slime-img" src="assets/homita.png?v=3" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><span class="slime-emoji" style="display:none">🩵</span></div><div id="slime-msg">ようこそ！</div></div>
 <div class="lower-hints"><div class="mini-map-hint">町の数は、場所の「市区町村」から数えています。未入力の場所は数に入りません。</div>
 <div class="mini-map-hint">記録はこの端末の中（localStorage）に保存されています。機種変更やGAS移植の前に、書き出しを残してください。</div></div>
 </section>
@@ -187,6 +187,6 @@
 <button class="dq-button" id="btn-celeb-close" type="button" style="margin-top:14px">やったー！</button>
 </div></div></div>
 <div id="toast" class="toast"></div>
-<script src="app.js"></script>
+<script src="app.js?v=3"></script>
 </body>
 </html>
