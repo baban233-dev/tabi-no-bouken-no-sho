@@ -88,7 +88,7 @@ function refreshHome(){
   document.getElementById('st-towns2').textContent=towns;
   var pct=expInLevel(db.exp);
   document.getElementById('st-expbar').style.width=pct+'%';
-  document.getElementById('st-exptext').textContent='次のレベルまで '+pct+' / 100';
+  document.getElementById('st-exptext').textContent=pct+' / 100';
   var msg=document.getElementById('slime-msg');
   if(!db.places.length)msg.innerHTML='ようこそ！ここは「旅の冒険の書」だよ。<br>まだ記録がないようだね。<br>右下の「＋」から、教会できろくしてみよう！';
   else msg.innerHTML='記録が <b>'+db.places.length+'</b> 件、制覇した町は <b>'+towns+'</b> 町、たからものは '+treasures+' 個だよ！'+(towns<db.places.length?'<br>場所に「市区町村」を入れると町に数えるよ。':'');

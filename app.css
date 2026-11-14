@@ -312,3 +312,8 @@ body{background:#79c7f2 url('assets/anime_bg.jpg') center top/cover fixed no-rep
 .hero-panther{right:1%;bottom:0;width:36%}
 .sign-board{margin-top:0}
 .section-box{background:#6b4a26 url('assets/wood_board.png') center/100% 100% no-repeat}
+
+/* ===== ANIME THEME 6: 固定文字は手書き文字の絵で ===== */
+.title-img{height:32px;width:auto;display:block}
+.label-img{height:16px;width:auto;vertical-align:-2px}
+.label-img.sm{height:12px;vertical-align:-1px}
