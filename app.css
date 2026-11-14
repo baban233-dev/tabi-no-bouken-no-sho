@@ -422,3 +422,8 @@ body[data-tab="home"] .app-header{display:none}
 .home-screen .hs-list .art-row .n{font-weight:700;color:#180d02}
 .home-screen .hs-list .art-row .m{opacity:1;font-weight:700;color:#180d02}
 .home-screen .hs-prefs{color:#180d02;font-weight:700}
+
+/* ===== THEME 17: 一覧を右へ・EXP枠を小さく ===== */
+.hs-list{left:19.5%;width:63%}
+.hs-expbar{width:36%;height:1.75%}
+.hs-exptext{width:36%}
