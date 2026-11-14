@@ -406,3 +406,13 @@ body[data-tab="home"] .app-header{display:none}
 #home-recent{top:60.44%;height:5.21%}
 .hs-towns{top:76.21%}
 .hs-prefs{top:73.34%}
+
+/* ===== THEME 15: 2635px版の位置（パンサー二重を解消・EXPを下げた） ===== */
+.home-screen{aspect-ratio:1040/2635}
+#st-lv{top:25.05%}#st-towns{top:27.48%}#st-places{top:29.83%}#st-treasure{top:32.14%}
+.hs-expbar{top:33.59%;height:1.90%}
+.hs-exptext{top:34.54%}
+#home-trips{top:49.56%;height:5.21%}
+#home-recent{top:58.67%;height:5.21%}
+.hs-towns{top:75.14%}
+.hs-prefs{top:72.16%}
