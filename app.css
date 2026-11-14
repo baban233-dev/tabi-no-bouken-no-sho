@@ -374,3 +374,6 @@ body[data-tab="home"] .app-header{display:none}
 .hs-exptext::before{content:"EXP "}
 .hs-towns{left:17.5%}
 .fab{clip-path:none;width:auto;height:auto;min-width:106px;padding:13px 18px;border-radius:12px;background:linear-gradient(180deg,#a4713a,#86592a);border:3px solid #5d3f1e;color:#fff3d6;font-family:"Klee One",cursive;font-size:17px;font-weight:700;box-shadow:0 4px 10px rgba(43,30,16,.45),inset 0 1px 0 rgba(255,240,210,.5);filter:none}
+
+/* ===== THEME 10b: 案内役をホミータの肖像カードに ===== */
+.slime-img{width:60px;height:60px;object-fit:cover;border-radius:12px;border:2px solid #8a6b45}
