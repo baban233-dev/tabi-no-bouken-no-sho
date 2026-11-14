@@ -317,3 +317,7 @@ body{background:#79c7f2 url('assets/anime_bg.jpg') center top/cover fixed no-rep
 .title-img{height:29px;width:auto;max-width:80%;display:block}
 .label-img{height:16px;width:auto;vertical-align:-2px}
 .label-img.sm{height:12px;vertical-align:-1px}
+
+/* ===== THEME 6.1: タイトル帯の比率を板に合わせ、文字の絵を白い帯の位置へ ===== */
+.sign-title{aspect-ratio:542/119;padding:0 10px}
+.title-img{transform:translateY(52%)}
