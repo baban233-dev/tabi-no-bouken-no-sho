@@ -314,6 +314,6 @@ body{background:#79c7f2 url('assets/anime_bg.jpg') center top/cover fixed no-rep
 .section-box{background:#6b4a26 url('assets/wood_board.png') center/100% 100% no-repeat}
 
 /* ===== ANIME THEME 6: 固定文字は手書き文字の絵で ===== */
-.title-img{height:37px;width:auto;display:block}
+.title-img{height:29px;width:auto;max-width:80%;display:block}
 .label-img{height:16px;width:auto;vertical-align:-2px}
 .label-img.sm{height:12px;vertical-align:-1px}
