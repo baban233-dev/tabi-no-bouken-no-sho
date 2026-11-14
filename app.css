@@ -416,3 +416,9 @@ body[data-tab="home"] .app-header{display:none}
 #home-recent{top:58.67%;height:5.21%}
 .hs-towns{top:75.14%}
 .hs-prefs{top:72.16%}
+
+/* ===== THEME 16: 枠内の文字を最濃に ===== */
+.home-screen .hs-list .art-row{color:#180d02;font-weight:700;font-size:3.25cqw}
+.home-screen .hs-list .art-row .n{font-weight:700;color:#180d02}
+.home-screen .hs-list .art-row .m{opacity:1;font-weight:700;color:#180d02}
+.home-screen .hs-prefs{color:#180d02;font-weight:700}
