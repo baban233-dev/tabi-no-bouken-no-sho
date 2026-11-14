@@ -366,3 +366,11 @@ body[data-tab="home"] .app-header{display:none}
 .hs-unit{font-size:4.9cqw;margin-left:1cqw}
 .hs-prefs{position:absolute;left:36%;top:71.9%;width:50%;font-family:"Klee One",cursive;font-size:2.9cqw;color:#43301c}
 .hs-prefs .pref-row{display:flex;justify-content:space-between;line-height:1.45;font-weight:600}
+
+/* ===== THEME 10: 実機フィードバック修正（EXP位置・枠幅・ボタン・FAB） ===== */
+.hs-expbar{left:14.4%;top:33.45%;width:29%;height:.95%}
+.hs-exptext{left:45.5%;top:33.85%;transform:translateY(-50%);color:#40301d;text-shadow:0 1px 0 rgba(255,246,220,.55);font-size:3.2cqw}
+.hs-exptext img{display:none}
+.hs-exptext::before{content:"EXP "}
+.hs-towns{left:17.5%}
+.fab{clip-path:none;width:auto;height:auto;min-width:106px;padding:13px 18px;border-radius:12px;background:linear-gradient(180deg,#a4713a,#86592a);border:3px solid #5d3f1e;color:#fff3d6;font-family:"Klee One",cursive;font-size:17px;font-weight:700;box-shadow:0 4px 10px rgba(43,30,16,.45),inset 0 1px 0 rgba(255,240,210,.5);filter:none}
