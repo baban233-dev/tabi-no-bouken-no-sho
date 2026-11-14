@@ -384,3 +384,11 @@ body[data-tab="home"] .app-header{display:none}
 .hs-exptext{left:13.6%;top:33.84%;width:30.6%;transform:translateY(-50%);text-align:center;color:#fff;text-shadow:0 1px 2px rgba(40,25,10,.85);font-weight:700;font-size:2.7cqw}
 .hs-list{color:#2e1f0e;font-weight:600;text-shadow:0 1px 0 rgba(255,250,235,.65)}
 .hs-prefs{color:#2e1f0e;font-weight:600;text-shadow:0 1px 0 rgba(255,250,235,.65)}
+
+/* ===== THEME 12: EXPバーを絵の元の大きさに・一覧の文字を読みやすく ===== */
+.hs-expbar{left:13.9%;top:33.28%;width:42.5%;height:2.58%}
+.hs-exptext{left:13.9%;top:34.57%;width:42.5%;font-size:3.3cqw}
+.hs-list{font-size:3.1cqw;line-height:1.3;font-weight:700;color:#221605;text-shadow:0 0 3px rgba(255,248,230,.95),0 1px 0 rgba(255,248,230,.95),0 -1px 0 rgba(255,248,230,.7)}
+#home-trips{height:5.6%}
+#home-recent{top:59.9%;height:5.6%}
+.hs-prefs{font-size:3.05cqw;font-weight:700;color:#221605;text-shadow:0 0 3px rgba(255,248,230,.95),0 1px 0 rgba(255,248,230,.95)}
