@@ -14,25 +14,24 @@
 <header class="app-header"><img class="title-slime" src="assets/slime.png" alt="" onerror="this.style.display='none'"><h1 class="app-title"><img class="title-img" src="assets/text_title.png" alt="旅の冒険の書"></h1></header>
 <main id="main-content">
 <section id="tab-home" class="tab-panel active">
-<div class="home-art"><img class="home-art-img" src="assets/home_full.jpg" alt="" onerror="this.style.display='none'">
-<div class="art-num" id="st-lv" style="top:36.2%">1</div>
-<div class="art-num" id="st-towns" style="top:41.0%">0</div>
-<div class="art-num" id="st-places" style="top:46.0%">0</div>
-<div class="art-num" id="st-treasure" style="top:50.7%">0</div>
-<div class="art-expbar"><div id="st-expbar"></div></div>
-<div class="art-exptext"><img class="art-next-img" src="assets/text_next.png" alt="次のレベルまで"><span id="st-exptext">0 / 100</span></div>
-<div class="slime-guide"><div class="slime-icon"><img class="slime-img" src="assets/slime.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><span class="slime-emoji" style="display:none">🩵</span></div><div id="slime-msg">ようこそ！</div></div>
-<div class="art-list" id="home-trips"></div>
-<div class="art-list" id="home-recent"></div></div>
-<div class="home-lower"><img class="home-lower-img" src="assets/home_lower.jpg" alt="" onerror="this.style.display='none'">
-<div class="art-towns"><span id="st-towns2">0</span><span class="art-unit">町</span></div>
-<div class="art-prefs" id="pref-progress"></div>
-<button class="art-btn" id="btn-conquest-open" type="button" aria-label="制覇マップを見る" style="left:25%;top:56.8%;width:55%;height:7%"></button>
-<button class="art-btn" id="btn-export" type="button" aria-label="データを書き出す（バックアップ）" style="left:29.5%;top:77%;width:51%;height:5.6%"></button>
-<button class="art-btn" id="btn-import" type="button" aria-label="データを読み込む" style="left:29.5%;top:82.6%;width:51%;height:5.6%"></button>
+<div class="home-screen"><img class="home-screen-img" src="assets/home_all.jpg" alt="" onerror="this.style.display='none'">
+<div class="hs-num" id="st-lv" style="top:25.8%">1</div>
+<div class="hs-num" id="st-towns" style="top:28.3%">0</div>
+<div class="hs-num" id="st-places" style="top:30.7%">0</div>
+<div class="hs-num" id="st-treasure" style="top:33.1%">0</div>
+<div class="hs-expbar"><div class="expbar-fill" id="st-expbar"></div></div>
+<div class="hs-exptext"><img src="assets/text_next.png" alt="つぎのレベルまで"><span id="st-exptext">あと 100</span></div>
+<div class="hs-list" id="home-trips" style="top:50.5%"></div>
+<div class="hs-list" id="home-recent" style="top:60.5%"></div>
+<div class="hs-towns"><span id="st-towns2">0</span><span class="hs-unit">町</span></div>
+<div class="hs-prefs" id="pref-progress"></div>
+<button class="art-btn" id="btn-conquest-open" type="button" aria-label="制覇マップを見る" style="left:32%;top:78%;width:36%;height:2.7%"></button>
+<button class="art-btn" id="btn-export" type="button" aria-label="データを書き出す（バックアップ）" style="left:28.5%;top:86.3%;width:43.5%;height:2.6%"></button>
+<button class="art-btn" id="btn-import" type="button" aria-label="データを読み込む" style="left:28.5%;top:89%;width:43.5%;height:2.6%"></button>
 <input type="file" id="file-import" accept=".json,application/json" style="display:none">
-<button class="art-btn" id="btn-wipe" type="button" aria-label="全データを消す" style="left:29.5%;top:88%;width:51%;height:5.6%"></button>
+<button class="art-btn" id="btn-wipe" type="button" aria-label="全データを消す" style="left:28.5%;top:91.5%;width:43.5%;height:2.6%"></button>
 </div>
+<div class="slime-guide"><div class="slime-icon"><img class="slime-img" src="assets/slime.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><span class="slime-emoji" style="display:none">🩵</span></div><div id="slime-msg">ようこそ！</div></div>
 <div class="lower-hints"><div class="mini-map-hint">町の数は、場所の「市区町村」から数えています。未入力の場所は数に入りません。</div>
 <div class="mini-map-hint">記録はこの端末の中（localStorage）に保存されています。機種変更やGAS移植の前に、書き出しを残してください。</div></div>
 </section>
