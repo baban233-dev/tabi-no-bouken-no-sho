@@ -427,3 +427,12 @@ body[data-tab="home"] .app-header{display:none}
 .hs-list{left:19.5%;width:63%}
 .hs-expbar{width:36%;height:1.75%}
 .hs-exptext{width:36%}
+
+/* ===== THEME 18: EXP専用の木枠（2740px版） ===== */
+.home-screen{aspect-ratio:1040/2740}
+.hs-expbar{left:16.35%;top:45.80%;width:40.38%;height:1.61%}
+.hs-exptext{left:16.35%;top:46.61%;width:40.38%}
+#home-trips{top:51.50%;height:5.00%}
+#home-recent{top:60.26%;height:5.00%}
+.hs-towns{top:76.09%}
+.hs-prefs{top:73.21%}
