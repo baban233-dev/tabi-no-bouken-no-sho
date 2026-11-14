@@ -275,3 +275,19 @@ main{padding:6px 10px 96px}
 .form-input,.form-select,.form-textarea{font-family:"Klee One",sans-serif}
 .chip{font-family:"Klee One",sans-serif}
 .big-num{font-family:"Hachi Maru Pop","Klee One",sans-serif}
+
+/* ===== ANIME THEME 3: 草原の背景＋木の看板 ===== */
+body{background:#79b657 url('assets/bg_meadow.jpg') center top/cover fixed no-repeat}
+#app{background:transparent}
+.sign-board{position:relative;width:min(94vw,430px);margin:2px auto 4px}
+.sign-img{display:block;width:100%;height:auto;filter:drop-shadow(0 5px 8px rgba(30,40,10,.4))}
+.sign-paper{position:absolute;left:23%;right:20%;top:18.5%;height:35%;display:flex;flex-direction:column;justify-content:center;color:#4a3016}
+.sign-paper .status-row{border-bottom:1px dashed rgba(120,80,35,.45);padding:1px 0;font-size:.84rem;line-height:1.3}
+.sign-paper .status-row:last-of-type{border-bottom:none}
+.sign-paper .status-label{color:#6a4a22}
+.sign-paper .status-value{font-weight:700}
+.sign-paper .exp-bar-wrap{margin-top:5px;height:8px}
+.sign-paper .exp-text{font-size:.68rem;color:#6a4a22;margin-top:3px}
+.app-header{background:url('assets/wood_plate.png') center/100% 100% no-repeat;border:none;min-height:56px}
+.app-title{color:#4a3016;text-shadow:0 1px 0 rgba(255,255,255,.65)}
+.status-window,.section-box{background-color:rgba(250,240,216,.96)}
