@@ -341,7 +341,7 @@ body[data-tab="home"] .app-header{display:none}
 .section-title{display:flex;align-items:center;gap:6px}
 
 /* ===== THEME 8: ホーム下半分も1枚の絵＋重ね表示 ===== */
-.home-lower{position:relative;margin:0 -12px;aspect-ratio:1152/2048;background:#8ec9e8;container-type:inline-size;overflow:hidden}
+.home-lower{position:relative;margin:0 -12px;aspect-ratio:1184/2096;background:#8ec9e8;container-type:inline-size;overflow:hidden}
 .home-lower-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .art-towns{position:absolute;left:20.5%;top:51%;transform:translateY(-50%);font-family:"Klee One",cursive;font-size:11.5cqw;font-weight:700;line-height:1;color:#40301d;text-shadow:0 1px 0 rgba(255,246,220,.55)}
 .art-unit{font-size:5cqw;margin-left:1cqw}
