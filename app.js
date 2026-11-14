@@ -118,7 +118,7 @@ function refreshHome(){
   var byPref=conquestByPref();
   var prefNames=Object.keys(byPref);
   if(!prefNames.length)document.getElementById('pref-progress').innerHTML='<div class="pref-row"><span>まだ制覇した町がありません</span><span></span></div>';
-  else document.getElementById('pref-progress').innerHTML=prefNames.slice(0,5).map(function(pn){var total=PREF_TOTALS[pn];return '<div class="pref-row"><span>'+esc(pn)+'</span><span>'+byPref[pn].length+(total?' / '+total:'')+'</span></div>';}).join('');
+  else document.getElementById('pref-progress').innerHTML=prefNames.slice(0,4).map(function(pn){var total=PREF_TOTALS[pn];return '<div class="pref-row"><span>'+esc(pn)+'</span><span>'+byPref[pn].length+(total?' / '+total:'')+'</span></div>';}).join('');
   var ft=document.getElementById('filter-trip');
   if(ft){var cur=ft.value;ft.innerHTML='<option value="">すべての旅</option>'+db.trips.map(function(t){return '<option value="'+t.id+'">'+esc(t.name)+'</option>';}).join('');ft.value=cur;if(ft.value!==cur)filters.tripId='';}
 }
