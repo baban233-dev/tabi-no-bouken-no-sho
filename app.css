@@ -396,3 +396,13 @@ body[data-tab="home"] .app-header{display:none}
 /* ===== THEME 13: 最近パネルの実フレーム化に伴う下段の位置調整 ===== */
 .hs-towns{top:76.76%}
 .hs-prefs{top:73.66%}
+
+/* ===== THEME 14: 縦に広げてパネル間隔を均等に（2753px版） ===== */
+.home-screen{aspect-ratio:1040/2753}
+#st-lv{top:23.97%}#st-towns{top:26.30%}#st-places{top:28.55%}#st-treasure{top:30.77%}
+.hs-expbar{top:30.95%;height:2.40%}
+.hs-exptext{top:32.15%}
+#home-trips{top:51.72%;height:5.21%}
+#home-recent{top:60.44%;height:5.21%}
+.hs-towns{top:76.21%}
+.hs-prefs{top:73.34%}
